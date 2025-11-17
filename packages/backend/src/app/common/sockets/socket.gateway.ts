@@ -7,10 +7,13 @@ import {
     MessageBody,
     ConnectedSocket,
 } from "@nestjs/websockets";
+import { UseFilters } from "@nestjs/common";
 import { Server, Socket } from "socket.io";
 import { SocketAuthService } from "./socket-auth.service";
 import { TillyLogger } from "../logger/tilly.logger";
+import { WsExceptionFilter } from "../filters/ws-exception.filter";
 
+@UseFilters(new WsExceptionFilter())
 @WebSocketGateway({
     cors: {
         origin: "*",

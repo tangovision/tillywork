@@ -5,7 +5,9 @@ import {
     MessageBody,
     ConnectedSocket,
 } from "@nestjs/websockets";
+import { UseFilters } from "@nestjs/common";
 import { TillyLogger } from "../logger/tilly.logger";
+import { WsExceptionFilter } from "../filters/ws-exception.filter";
 
 import { ClsService } from "nestjs-cls";
 import { YjsPersistenceService } from "../collaboration/yjs.persistence.service";
@@ -22,6 +24,7 @@ import { fromUint8Array, toUint8Array } from "js-base64";
 import { JSONContent } from "@tiptap/core";
 import { assertNotNullOrUndefined, editorSchema } from "@tillywork/shared";
 
+@UseFilters(new WsExceptionFilter())
 @WebSocketGateway({
     cors: {
         origin: "*",
