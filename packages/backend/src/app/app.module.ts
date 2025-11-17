@@ -9,6 +9,7 @@ import { APP_INTERCEPTOR, APP_GUARD, APP_FILTER } from "@nestjs/core";
 import { TracingInterceptor } from "./common/interceptors/tracing.interceptor";
 import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
 import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
+import { SanitizationModule } from "./common/sanitization/sanitization.module";
 
 @Module({
     imports: [
@@ -43,6 +44,7 @@ import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
                 limit: 100, // 100 requests per minute
             },
         ]),
+        SanitizationModule,
         CommonModule,
     ],
     controllers: [],
