@@ -79,11 +79,28 @@ async function bootstrap() {
         serverAdapter,
     });
 
+    // Add authentication middleware for BullMQ dashboard
+    const jwtService = app.get(JwtService);
     app.getHttpAdapter()
         .getInstance()
         .register(serverAdapter.registerPlugin(), {
             basePath: "/bullmq",
             prefix: "/bullmq",
+            preHandler: async (request, reply) => {
+                const authHeader = request.headers.authorization;
+                if (!authHeader || !authHeader.startsWith("Bearer ")) {
+                    reply.code(401).send({ message: "Unauthorized: No token provided" });
+                    return;
+                }
+
+                const token = authHeader.substring(7);
+                try {
+                    await jwtService.verifyAsync(token);
+                } catch (error) {
+                    reply.code(401).send({ message: "Unauthorized: Invalid token" });
+                    return;
+                }
+            },
         });
 
     // Add OpenTelemetry context middleware
