@@ -5,9 +5,10 @@ import { CommonModule } from "./common/common.module";
 import typeorm from "../config/typeorm";
 import { validationSchema } from "../config/validation.schema";
 import { EventEmitterModule } from "@nestjs/event-emitter";
-import { APP_INTERCEPTOR, APP_GUARD } from "@nestjs/core";
+import { APP_INTERCEPTOR, APP_GUARD, APP_FILTER } from "@nestjs/core";
 import { TracingInterceptor } from "./common/interceptors/tracing.interceptor";
 import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
+import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
 
 @Module({
     imports: [
@@ -46,6 +47,10 @@ import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
     ],
     controllers: [],
     providers: [
+        {
+            provide: APP_FILTER,
+            useClass: HttpExceptionFilter,
+        },
         {
             provide: APP_INTERCEPTOR,
             useClass: TracingInterceptor,
