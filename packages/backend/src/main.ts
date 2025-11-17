@@ -151,4 +151,9 @@ async function bootstrap() {
     logger.log(`Environment: ${environment}`);
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+    const logger = new TillyLogger("bootstrap");
+    logger.error("Failed to start application", error.stack);
+    logger.error(`Error: ${error.message}`);
+    process.exit(1);
+});
