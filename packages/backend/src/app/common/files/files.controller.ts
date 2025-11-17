@@ -76,6 +76,8 @@ const ALLOWED_MIME_TYPES = [
 export class FilesController {
     constructor(private readonly filesService: FilesService) {}
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Get(":id")
     async getFile(@Param("id") id: string, @Response() res: FastifyReply) {
         // Check if file entity exists in db
