@@ -72,6 +72,7 @@
     "dependencies": {
         "@excalidraw/excalidraw": "^0.17.6",
         "@faker-js/faker": "^8.4.1",
+        "@fastify/helmet": "^13.0.2",
         "@nestjs/common": "^10.0.2",
         "@nestjs/core": "^10.0.2",
         "@nestjs/platform-express": "^10.0.2",

@@ -17,6 +17,7 @@ import { contentParser } from "fastify-multer";
 import { trace, context } from "@opentelemetry/api";
 import { TillyLogger } from "./app/common/logger/tilly.logger";
 import { JwtService } from "@nestjs/jwt";
+import helmet from "@fastify/helmet";
 
 async function bootstrap() {
     const logger = new TillyLogger("main.ts");
@@ -38,6 +39,19 @@ async function bootstrap() {
         credentials: true,
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    });
+
+    // Add security headers with Helmet
+    await app.register(helmet, {
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                styleSrc: ["'self'", "'unsafe-inline'"],
+                scriptSrc: ["'self'"],
+                imgSrc: ["'self'", "data:", "https:"],
+            },
+        },
+        crossOriginEmbedderPolicy: false, // Allow embedding for Swagger UI
     });
 
     // Enable API URI Versioning
