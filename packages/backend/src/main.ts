@@ -24,13 +24,21 @@ async function bootstrap() {
         AppModule,
         new FastifyAdapter(),
         {
-            cors: true,
             logger: logger,
         }
     );
     const configService = app.get(ConfigService);
     const port = configService.get("PORT");
     const environment = configService.get("NODE_ENV");
+    const frontendUrl = configService.get("TW_FRONTEND_URL");
+
+    // Configure CORS to only allow the frontend URL
+    app.enableCors({
+        origin: frontendUrl || "http://localhost:4200",
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    });
 
     // Enable API URI Versioning
     app.enableVersioning({
