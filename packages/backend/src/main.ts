@@ -71,15 +71,25 @@ async function bootstrap() {
 
     app.register(contentParser);
 
-    await SwaggerModule.loadPluginMetadata(metadata);
-    const config = new DocumentBuilder()
-        .setTitle("tillywork API")
-        .setVersion("1.0")
-        .addBearerAuth()
-        .addBasicAuth()
-        .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup("docs", app, document);
+    // Only enable Swagger documentation in development or if explicitly enabled
+    // In production, API docs expose internal structure and should be restricted
+    if (
+        environment !== "production" ||
+        configService.get("TW_ENABLE_SWAGGER") === "true"
+    ) {
+        await SwaggerModule.loadPluginMetadata(metadata);
+        const config = new DocumentBuilder()
+            .setTitle("tillywork API")
+            .setVersion("1.0")
+            .addBearerAuth()
+            .addBasicAuth()
+            .build();
+        const document = SwaggerModule.createDocument(app, config);
+        SwaggerModule.setup("docs", app, document);
+        logger.log("📚 Swagger documentation enabled at /docs");
+    } else {
+        logger.log("🔒 Swagger documentation disabled in production");
+    }
 
     const serverAdapter = new BullFastifyAdapter();
     serverAdapter.setBasePath("/bullmq");
