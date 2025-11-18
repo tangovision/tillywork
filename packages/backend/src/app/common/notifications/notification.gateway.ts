@@ -25,7 +25,17 @@ export class NotificationsGateway
     server: Server;
     private logger = new TillyLogger("NotificationsGateway");
 
-    constructor(private readonly socketAuthService: SocketAuthService) {}
+    constructor(private readonly socketAuthService: SocketAuthService) {
+        // In production, TW_FRONTEND_URL must be set for security
+        if (
+            process.env.NODE_ENV === "production" &&
+            !process.env.TW_FRONTEND_URL
+        ) {
+            throw new Error(
+                "TW_FRONTEND_URL environment variable must be set in production for WebSocket security"
+            );
+        }
+    }
 
     async handleConnection(client: Socket) {
         const user = await this.socketAuthService.authenticateSocket(client);

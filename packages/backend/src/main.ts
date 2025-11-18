@@ -33,6 +33,13 @@ async function bootstrap() {
     const environment = configService.get("NODE_ENV");
     const frontendUrl = configService.get("TW_FRONTEND_URL");
 
+    // In production, TW_FRONTEND_URL must be set for security
+    if (environment === "production" && !frontendUrl) {
+        throw new Error(
+            "TW_FRONTEND_URL environment variable must be set in production"
+        );
+    }
+
     // Configure CORS to only allow the frontend URL
     app.enableCors({
         origin: frontendUrl || "http://localhost:4200",
