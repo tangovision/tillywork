@@ -119,6 +119,21 @@ export class CardsService {
         }
 
         if (sortBy && sortOrder) {
+            // Whitelist of allowed sortBy values to prevent SQL injection
+            const allowedSortFields = [
+                "cardLists.order",
+                "card.id",
+                "card.createdAt",
+                "card.updatedAt",
+                "type.name",
+            ];
+
+            if (!allowedSortFields.includes(sortBy)) {
+                throw new Error(
+                    `Invalid sortBy field: ${sortBy}. Allowed fields: ${allowedSortFields.join(", ")}`
+                );
+            }
+
             queryBuilder.addOrderBy(sortBy, sortOrder, "NULLS LAST");
         }
 

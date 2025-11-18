@@ -122,6 +122,20 @@ export class CardActivitiesService {
             );
         }
 
+        // Whitelist of allowed sortBy values to prevent SQL injection
+        const allowedSortFields = [
+            "createdAt",
+            "updatedAt",
+            "id",
+            "type",
+        ];
+
+        if (!allowedSortFields.includes(sortBy)) {
+            throw new Error(
+                `Invalid sortBy field: ${sortBy}. Allowed fields: ${allowedSortFields.join(", ")}`
+            );
+        }
+
         queryBuilder.orderBy(
             `cardActivity.${sortBy}`,
             sortOrder.toUpperCase() as "ASC" | "DESC"
