@@ -4,6 +4,8 @@ import {
     SubscribeMessage,
     MessageBody,
     ConnectedSocket,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
 } from "@nestjs/websockets";
 import { UseFilters } from "@nestjs/common";
 import { TillyLogger } from "../logger/tilly.logger";
@@ -12,6 +14,7 @@ import { WsExceptionFilter } from "../filters/ws-exception.filter";
 import { ClsService } from "nestjs-cls";
 import { YjsPersistenceService } from "../collaboration/yjs.persistence.service";
 import { CardsService } from "./cards.service";
+import { SocketAuthService } from "../sockets/socket-auth.service";
 
 import { Server, Socket } from "socket.io";
 import * as Y from "yjs";
@@ -31,7 +34,9 @@ import { assertNotNullOrUndefined, editorSchema } from "@tillywork/shared";
         credentials: true,
     },
 })
-export class CardsGateway {
+export class CardsGateway
+    implements OnGatewayConnection, OnGatewayDisconnect
+{
     @WebSocketServer()
     server: Server;
 
@@ -49,8 +54,23 @@ export class CardsGateway {
     constructor(
         private readonly yjsPersistenceService: YjsPersistenceService,
         private readonly cardsService: CardsService,
-        private readonly clsService: ClsService
+        private readonly clsService: ClsService,
+        private readonly socketAuthService: SocketAuthService
     ) {}
+
+    async handleConnection(client: Socket) {
+        const user = await this.socketAuthService.authenticateSocket(client);
+        if (!user) {
+            this.logger.warn(
+                `Unauthenticated connection attempt (socket ${client.id})`
+            );
+            client.disconnect();
+            return;
+        }
+
+        client.data.user = user;
+        this.logger.log(`User connected: ${user.id} (socket ${client.id})`);
+    }
 
     @SubscribeMessage("card:join")
     async onJoin(
@@ -161,6 +181,13 @@ export class CardsGateway {
     }
 
     async handleDisconnect(client: Socket) {
+        const userId = client.data.user?.id;
+        if (userId) {
+            this.logger.log(
+                `User disconnected: ${userId} (socket ${client.id})`
+            );
+        }
+
         const room = this.socketToRoom.get(client.id);
         if (!room) return;
 
