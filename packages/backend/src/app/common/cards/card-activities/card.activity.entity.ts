@@ -5,6 +5,7 @@ import {
     ManyToOne,
     CreateDateColumn,
     Relation,
+    Index,
 } from "typeorm";
 import { Card } from "../card.entity";
 import { User } from "../../users/user.entity";
@@ -40,6 +41,7 @@ export class CardActivity {
     @ManyToOne(() => User, { nullable: true })
     createdBy?: Relation<User>;
 
+    @Index()
     @CreateDateColumn()
     createdAt: Date;
 }
