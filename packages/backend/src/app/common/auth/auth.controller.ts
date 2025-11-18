@@ -12,6 +12,8 @@ import { AuthService, RegisterResponse } from "./services/auth.service";
 import { LocalAuthGuard } from "./guards/local.auth.guard";
 import { JwtAuthGuard } from "./guards/jwt.auth.guard";
 import { CreateUserDto } from "../users/dto/create.user.dto";
+import { ForgotPasswordDto } from "./dto/forgot-password.dto";
+import { ResetPasswordDto } from "./dto/reset-password.dto";
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { CurrentUser } from "./decorators/current.user.decorator";
 import { User } from "../users/user.entity";
@@ -105,6 +107,29 @@ export class AuthController {
         }
 
         return response;
+    }
+
+    @Throttle([{ limit: 3, ttl: 3600000 }]) // 3 attempts per hour
+    @Post("forgot-password")
+    async forgotPassword(
+        @Body() forgotPasswordDto: ForgotPasswordDto
+    ): Promise<{ message: string }> {
+        return this.authService.forgotPassword(forgotPasswordDto.email);
+    }
+
+    @Throttle([{ limit: 3, ttl: 3600000 }]) // 3 attempts per hour
+    @Post("reset-password")
+    async resetPassword(
+        @Body() resetPasswordDto: ResetPasswordDto
+    ): Promise<{ message: string }> {
+        try {
+            return await this.authService.resetPassword(
+                resetPasswordDto.token,
+                resetPasswordDto.newPassword
+            );
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 }
 

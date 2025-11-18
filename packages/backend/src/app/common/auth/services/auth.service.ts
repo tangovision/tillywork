@@ -204,3 +204,76 @@ export class AuthService {
         return { ...user, accessToken };
     }
 }
+
+    async forgotPassword(email: string): Promise<{ message: string }> {
+        const user = await this.usersService.findOneByEmail(email);
+        
+        if (!user) {
+            // Don't reveal if email exists for security (timing attack prevention)
+            return { message: "If the email exists, a password reset link will be sent" };
+        }
+
+        // Generate secure random token
+        const crypto = await import('crypto');
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        
+        // Hash the token before storing (never store plain tokens)
+        const hashedToken = await bcrypt.hash(resetToken, 10);
+        
+        // Token expires in 1 hour
+        const resetTokenExpiry = new Date();
+        resetTokenExpiry.setHours(resetTokenExpiry.getHours() + 1);
+
+        // Update user with reset token and expiry
+        await this.usersService.updateResetToken(user.id, hashedToken, resetTokenExpiry);
+
+        // TODO: Send email with resetToken
+        // In production, you would send an email here with a link like:
+        // ${FRONTEND_URL}/reset-password?token=${resetToken}
+        
+        this.logger.log(`Password reset requested for user ${user.id}`);
+        
+        return { message: "If the email exists, a password reset link will be sent" };
+    }
+
+    async resetPassword(
+        token: string,
+        newPassword: string
+    ): Promise<{ message: string }> {
+        const users = await this.usersService.findUsersWithResetTokens();
+
+        let matchedUser: User | null = null;
+
+        // Find user by comparing hashed tokens
+        for (const user of users) {
+            if (!user.resetToken || !user.resetTokenExpiry) continue;
+
+            const isValidToken = await bcrypt.compare(token, user.resetToken);
+            if (isValidToken) {
+                matchedUser = user;
+                break;
+            }
+        }
+
+        if (!matchedUser) {
+            throw new Error("Invalid or expired reset token");
+        }
+
+        // Check if token has expired
+        if (new Date() > matchedUser.resetTokenExpiry) {
+            throw new Error("Invalid or expired reset token");
+        }
+
+        // Hash new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update password and clear reset token
+        await this.usersService.updatePasswordAndClearResetToken(
+            matchedUser.id,
+            hashedPassword
+        );
+
+        this.logger.log(`Password successfully reset for user ${matchedUser.id}`);
+
+        return { message: "Password has been successfully reset" };
+    }

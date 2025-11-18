@@ -35,6 +35,18 @@ export class User {
     password: string;
 
     /**
+     * Token for password reset functionality. Stored as a hashed value.
+     */
+    @Column({ type: "varchar", length: 255, nullable: true, select: false })
+    resetToken: string;
+
+    /**
+     * Expiration timestamp for the password reset token.
+     */
+    @Column({ type: "timestamp", nullable: true, select: false })
+    resetTokenExpiry: Date;
+
+    /**
      * The first name of the user.
      */
     @Column({ type: "varchar", length: 255 })

@@ -78,3 +78,35 @@ export class UsersService {
         await this.usersRepository.softRemove(user);
     }
 }
+
+    async updateResetToken(
+        userId: number,
+        resetToken: string,
+        resetTokenExpiry: Date
+    ): Promise<void> {
+        await this.usersRepository.update(userId, {
+            resetToken,
+            resetTokenExpiry,
+        });
+    }
+
+    async findUsersWithResetTokens(): Promise<User[]> {
+        return this.usersRepository
+            .createQueryBuilder("user")
+            .addSelect("user.resetToken")
+            .addSelect("user.resetTokenExpiry")
+            .where("user.resetToken IS NOT NULL")
+            .andWhere("user.resetTokenExpiry IS NOT NULL")
+            .getMany();
+    }
+
+    async updatePasswordAndClearResetToken(
+        userId: number,
+        hashedPassword: string
+    ): Promise<void> {
+        await this.usersRepository.update(userId, {
+            password: hashedPassword,
+            resetToken: null,
+            resetTokenExpiry: null,
+        });
+    }
