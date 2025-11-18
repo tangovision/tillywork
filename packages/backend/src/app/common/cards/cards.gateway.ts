@@ -78,6 +78,17 @@ export class CardsGateway
         @ConnectedSocket() client: Socket
     ) {
         const room = `card:${data.cardId}`;
+
+        // Verify user has access to the card before allowing them to join
+        try {
+            await this.cardsService.findOne(data.cardId);
+        } catch (error) {
+            this.logger.warn(
+                `User ${client.data.user?.id} attempted to join card ${data.cardId} without authorization`
+            );
+            throw error;
+        }
+
         client.join(room);
 
         let doc = this.docs.get(room);
@@ -159,6 +170,17 @@ export class CardsGateway
         @ConnectedSocket() client: Socket
     ) {
         const { cardId, update } = data;
+
+        // Verify user still has access to the card
+        try {
+            await this.cardsService.findOne(+cardId);
+        } catch (error) {
+            this.logger.warn(
+                `User ${client.data.user?.id} attempted to update card ${cardId} without authorization`
+            );
+            throw error;
+        }
+
         const doc = this.docs.get(`card:${cardId}`);
         assertNotNullOrUndefined(doc, "doc");
 
