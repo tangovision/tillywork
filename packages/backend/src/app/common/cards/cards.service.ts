@@ -236,6 +236,18 @@ export class CardsService {
         cardTypeId: number;
         workspaceId: number;
     }): Promise<Card[]> {
+        const user = this.clsService.get("user");
+
+        // Verify user has access to the workspace
+        if (!this.aclContext.shouldSkipAcl()) {
+            await this.accessControlService.authorize(
+                user,
+                "workspace",
+                workspaceId,
+                PermissionLevel.VIEWER
+            );
+        }
+
         const titleField = await this.cardsRepository.manager
             .getRepository(Field)
             .findOne({
