@@ -16,7 +16,8 @@ import { WsExceptionFilter } from "../filters/ws-exception.filter";
 @UseFilters(new WsExceptionFilter())
 @WebSocketGateway({
     cors: {
-        origin: "*",
+        origin: process.env.TW_FRONTEND_URL || "http://localhost:4200",
+        credentials: true,
     },
 })
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
