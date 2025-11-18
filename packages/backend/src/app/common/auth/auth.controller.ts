@@ -1,4 +1,12 @@
-import { Body, Controller, Param, Post, Res, UseGuards } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Param,
+    Post,
+    UseGuards,
+    ConflictException,
+    BadRequestException,
+} from "@nestjs/common";
 import { AuthService, RegisterResponse } from "./services/auth.service";
 import { LocalAuthGuard } from "./guards/local.auth.guard";
 import { JwtAuthGuard } from "./guards/jwt.auth.guard";
@@ -40,14 +48,14 @@ export class AuthController {
     }
 
     @Post("register")
-    async register(
-        @Body() createUserDto: CreateUserDto,
-        @Res({ passthrough: true }) res
-    ): Promise<RegisterResponse> {
+    async register(@Body() createUserDto: CreateUserDto): Promise<RegisterResponse> {
         const response = await this.authService.register(createUserDto);
 
         if (response["error"]) {
-            res.status(200);
+            if (response["error"] === "EMAIL_EXISTS") {
+                throw new ConflictException("Email already exists");
+            }
+            throw new BadRequestException("Registration failed");
         }
 
         return response;
@@ -55,15 +63,20 @@ export class AuthController {
 
     @Post("invite/:inviteCode")
     async registerWithInvite(
-        @Body() createUserDto: CreateUserDto,
-        @Res({ passthrough: true }) res
+        @Body() createUserDto: CreateUserDto
     ): Promise<RegisterResponse> {
         const response = await this.authService.registerWithInvite(
             createUserDto
         );
 
         if (response["error"]) {
-            res.status(200);
+            if (response["error"] === "EMAIL_EXISTS") {
+                throw new ConflictException("Email already exists");
+            }
+            if (response["error"] === "INVALID_INVITE_CODE") {
+                throw new BadRequestException("Invalid invite code");
+            }
+            throw new BadRequestException("Registration failed");
         }
 
         return response;
@@ -73,8 +86,7 @@ export class AuthController {
     @Post("invite/:inviteCode/join")
     async joinInvitation(
         @Param("inviteCode") inviteCode: string,
-        @CurrentUser() user: User,
-        @Res({ passthrough: true }) res
+        @CurrentUser() user: User
     ): Promise<RegisterResponse> {
         const response = await this.authService.joinInvitation({
             inviteCode,
@@ -82,7 +94,10 @@ export class AuthController {
         });
 
         if (response["error"]) {
-            res.status(200);
+            if (response["error"] === "INVALID_INVITE_CODE") {
+                throw new BadRequestException("Invalid invite code");
+            }
+            throw new BadRequestException("Failed to join invitation");
         }
 
         return response;
