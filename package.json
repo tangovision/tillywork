@@ -84,6 +84,7 @@
         "dayjs": "^1.11.10",
         "deep-object-diff": "^1.1.9",
         "dompurify": "^3.3.0",
+        "file-type": "^21.1.0",
         "isomorphic-dompurify": "^2.32.0",
         "js-base64": "^3.7.7",
         "jwt-decode": "^4.0.0",
