@@ -4,12 +4,17 @@ import {
     SubscribeMessage,
     MessageBody,
     ConnectedSocket,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
 } from "@nestjs/websockets";
+import { UseFilters } from "@nestjs/common";
 import { TillyLogger } from "../logger/tilly.logger";
+import { WsExceptionFilter } from "../filters/ws-exception.filter";
 
 import { ClsService } from "nestjs-cls";
 import { YjsPersistenceService } from "../collaboration/yjs.persistence.service";
 import { CardsService } from "./cards.service";
+import { SocketAuthService } from "../sockets/socket-auth.service";
 
 import { Server, Socket } from "socket.io";
 import * as Y from "yjs";
@@ -22,12 +27,16 @@ import { fromUint8Array, toUint8Array } from "js-base64";
 import { JSONContent } from "@tiptap/core";
 import { assertNotNullOrUndefined, editorSchema } from "@tillywork/shared";
 
+@UseFilters(new WsExceptionFilter())
 @WebSocketGateway({
     cors: {
-        origin: "*",
+        origin: process.env.TW_FRONTEND_URL || "http://localhost:4200",
+        credentials: true,
     },
 })
-export class CardsGateway {
+export class CardsGateway
+    implements OnGatewayConnection, OnGatewayDisconnect
+{
     @WebSocketServer()
     server: Server;
 
@@ -45,8 +54,33 @@ export class CardsGateway {
     constructor(
         private readonly yjsPersistenceService: YjsPersistenceService,
         private readonly cardsService: CardsService,
-        private readonly clsService: ClsService
-    ) {}
+        private readonly clsService: ClsService,
+        private readonly socketAuthService: SocketAuthService
+    ) {
+        // In production, TW_FRONTEND_URL must be set for security
+        if (
+            process.env.NODE_ENV === "production" &&
+            !process.env.TW_FRONTEND_URL
+        ) {
+            throw new Error(
+                "TW_FRONTEND_URL environment variable must be set in production for WebSocket security"
+            );
+        }
+    }
+
+    async handleConnection(client: Socket) {
+        const user = await this.socketAuthService.authenticateSocket(client);
+        if (!user) {
+            this.logger.warn(
+                `Unauthenticated connection attempt (socket ${client.id})`
+            );
+            client.disconnect();
+            return;
+        }
+
+        client.data.user = user;
+        this.logger.log(`User connected: ${user.id} (socket ${client.id})`);
+    }
 
     @SubscribeMessage("card:join")
     async onJoin(
@@ -54,6 +88,17 @@ export class CardsGateway {
         @ConnectedSocket() client: Socket
     ) {
         const room = `card:${data.cardId}`;
+
+        // Verify user has access to the card before allowing them to join
+        try {
+            await this.cardsService.findOne(data.cardId);
+        } catch (error) {
+            this.logger.warn(
+                `User ${client.data.user?.id} attempted to join card ${data.cardId} without authorization`
+            );
+            throw error;
+        }
+
         client.join(room);
 
         let doc = this.docs.get(room);
@@ -135,6 +180,17 @@ export class CardsGateway {
         @ConnectedSocket() client: Socket
     ) {
         const { cardId, update } = data;
+
+        // Verify user still has access to the card
+        try {
+            await this.cardsService.findOne(+cardId);
+        } catch (error) {
+            this.logger.warn(
+                `User ${client.data.user?.id} attempted to update card ${cardId} without authorization`
+            );
+            throw error;
+        }
+
         const doc = this.docs.get(`card:${cardId}`);
         assertNotNullOrUndefined(doc, "doc");
 
@@ -157,6 +213,13 @@ export class CardsGateway {
     }
 
     async handleDisconnect(client: Socket) {
+        const userId = client.data.user?.id;
+        if (userId) {
+            this.logger.log(
+                `User disconnected: ${userId} (socket ${client.id})`
+            );
+        }
+
         const room = this.socketToRoom.get(client.id);
         if (!room) return;
 

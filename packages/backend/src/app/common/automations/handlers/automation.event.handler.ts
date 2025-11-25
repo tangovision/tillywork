@@ -80,8 +80,10 @@ export class AutomationEventHandler {
                 }
             } catch (error) {
                 this.logger.error(
-                    `Failed to run automation ${automation.id}: ${error.message}`
+                    `Failed to run automation ${automation.id}: ${error.message}`,
+                    error.stack
                 );
+                // Error is intentionally not re-thrown to allow other automations to continue
             }
         }
     }

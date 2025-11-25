@@ -23,7 +23,9 @@ import { NotificationPreferenceModule } from "../notifications/notification-pref
         forwardRef(() => UsersModule), // Use forwardRef to avoid circular dependency,
         JwtModule.register({
             secret: process.env.TW_SECRET_KEY,
-            signOptions: { expiresIn: "7d" },
+            // Reduced from 7d to 2h for better security
+            // Consider implementing refresh tokens for longer sessions
+            signOptions: { expiresIn: "2h" },
             global: true,
         }),
         ConfigModule.forRoot(),

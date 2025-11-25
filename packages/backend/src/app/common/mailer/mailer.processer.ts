@@ -23,11 +23,17 @@ export class MailerProcessor {
 
         try {
             return await this.mailerService.processEmail(job.data);
-        } catch {
+        } catch (error) {
+            this.logger.error(
+                `Failed to process email ${emailId}: ${error.message}`,
+                error.stack
+            );
             this.mailerService.updateStatus({
                 id: emailId,
                 newStatus: EmailStatus.FAILED,
             });
+            // Re-throw to let Bull handle retry logic
+            throw error;
         }
     }
 }

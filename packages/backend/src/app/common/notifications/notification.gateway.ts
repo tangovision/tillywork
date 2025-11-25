@@ -1,17 +1,65 @@
-import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import { Server } from "socket.io";
+import {
+    WebSocketGateway,
+    WebSocketServer,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
+} from "@nestjs/websockets";
+import { UseFilters } from "@nestjs/common";
+import { Server, Socket } from "socket.io";
 import { TillyLogger } from "../logger/tilly.logger";
+import { WsExceptionFilter } from "../filters/ws-exception.filter";
 import { Notification } from "./notification.entity";
+import { SocketAuthService } from "../sockets/socket-auth.service";
 
+@UseFilters(new WsExceptionFilter())
 @WebSocketGateway({
     cors: {
-        origin: "*",
+        origin: process.env.TW_FRONTEND_URL || "http://localhost:4200",
+        credentials: true,
     },
 })
-export class NotificationsGateway {
+export class NotificationsGateway
+    implements OnGatewayConnection, OnGatewayDisconnect
+{
     @WebSocketServer()
     server: Server;
     private logger = new TillyLogger("NotificationsGateway");
+
+    constructor(private readonly socketAuthService: SocketAuthService) {
+        // In production, TW_FRONTEND_URL must be set for security
+        if (
+            process.env.NODE_ENV === "production" &&
+            !process.env.TW_FRONTEND_URL
+        ) {
+            throw new Error(
+                "TW_FRONTEND_URL environment variable must be set in production for WebSocket security"
+            );
+        }
+    }
+
+    async handleConnection(client: Socket) {
+        const user = await this.socketAuthService.authenticateSocket(client);
+        if (!user) {
+            this.logger.warn(
+                `Unauthenticated connection attempt (socket ${client.id})`
+            );
+            client.disconnect();
+            return;
+        }
+
+        client.data.user = user;
+        client.join(String(user.id));
+        this.logger.log(`User connected: ${user.id} (socket ${client.id})`);
+    }
+
+    handleDisconnect(client: Socket) {
+        const userId = client.data.user?.id;
+        if (userId) {
+            this.logger.log(
+                `User disconnected: ${userId} (socket ${client.id})`
+            );
+        }
+    }
 
     sendNotificationToUser(userId: number, notification: Notification) {
         this.server.to(String(userId)).emit("notification", notification);

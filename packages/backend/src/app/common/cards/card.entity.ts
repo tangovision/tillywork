@@ -3,6 +3,7 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    Index,
     JoinColumn,
     JoinTable,
     ManyToMany,
@@ -48,10 +49,12 @@ export class Card {
     @ManyToOne(() => User)
     createdBy: Relation<User>;
 
+    @Index()
     @CreateDateColumn({ type: "timestamp" })
     createdAt: Date;
     @UpdateDateColumn({ type: "timestamp" })
     updatedAt: Date;
+    @Index()
     @DeleteDateColumn({ type: "timestamp" })
     deletedAt: Date;
 
@@ -64,6 +67,7 @@ export class Card {
     @ManyToOne(() => Workspace, { onDelete: "CASCADE" })
     workspace: Relation<Workspace>;
 
+    @Index()
     @Column({ type: "bigint" })
     workspaceId: number;
 }

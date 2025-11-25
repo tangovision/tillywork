@@ -22,6 +22,7 @@ import { WatcherModule } from "./watchers/watcher.module";
 import { UserIntegrationModule } from "./user-integrations/user.integration.module";
 import { CollaborationModule } from "./collaboration/collaboration.module";
 import { SocketModule } from "./sockets/socket.module";
+import { QueueErrorHandlerModule } from "./queues/queue-error-handler.module";
 import { ClickUpImportModule } from "./clickup-import/clickup.import.module";
 
 @Module({
@@ -62,6 +63,7 @@ import { ClickUpImportModule } from "./clickup-import/clickup.import.module";
         UserIntegrationModule,
         CollaborationModule,
         SocketModule,
+        QueueErrorHandlerModule,
         ClickUpImportModule,
     ],
     controllers: [],

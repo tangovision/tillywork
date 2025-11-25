@@ -188,7 +188,10 @@ const config: TypeOrmModuleOptions = {
         process.env.TW_DB_ENABLE_SSL === "true"
             ? {
                   ssl: {
-                      rejectUnauthorized: false,
+                      // Only disable certificate verification in development with self-signed certs
+                      // In production, this should be true for security
+                      rejectUnauthorized:
+                          process.env.TW_DB_SSL_REJECT_UNAUTHORIZED !== "false",
                   },
               }
             : undefined,

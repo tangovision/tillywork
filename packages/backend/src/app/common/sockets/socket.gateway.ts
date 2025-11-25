@@ -7,13 +7,17 @@ import {
     MessageBody,
     ConnectedSocket,
 } from "@nestjs/websockets";
+import { UseFilters } from "@nestjs/common";
 import { Server, Socket } from "socket.io";
 import { SocketAuthService } from "./socket-auth.service";
 import { TillyLogger } from "../logger/tilly.logger";
+import { WsExceptionFilter } from "../filters/ws-exception.filter";
 
+@UseFilters(new WsExceptionFilter())
 @WebSocketGateway({
     cors: {
-        origin: "*",
+        origin: process.env.TW_FRONTEND_URL || "http://localhost:4200",
+        credentials: true,
     },
 })
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -22,7 +26,17 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     private logger = new TillyLogger("SocketGateway");
 
-    constructor(private readonly socketAuthService: SocketAuthService) {}
+    constructor(private readonly socketAuthService: SocketAuthService) {
+        // In production, TW_FRONTEND_URL must be set for security
+        if (
+            process.env.NODE_ENV === "production" &&
+            !process.env.TW_FRONTEND_URL
+        ) {
+            throw new Error(
+                "TW_FRONTEND_URL environment variable must be set in production for WebSocket security"
+            );
+        }
+    }
 
     async handleConnection(client: Socket) {
         const user = await this.socketAuthService.authenticateSocket(client);

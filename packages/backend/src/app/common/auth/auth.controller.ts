@@ -1,8 +1,19 @@
-import { Body, Controller, Param, Post, Res, UseGuards } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Param,
+    Post,
+    UseGuards,
+    ConflictException,
+    BadRequestException,
+} from "@nestjs/common";
+import { Throttle } from "@nestjs/throttler";
 import { AuthService, RegisterResponse } from "./services/auth.service";
 import { LocalAuthGuard } from "./guards/local.auth.guard";
 import { JwtAuthGuard } from "./guards/jwt.auth.guard";
 import { CreateUserDto } from "../users/dto/create.user.dto";
+import { ForgotPasswordDto } from "./dto/forgot-password.dto";
+import { ResetPasswordDto } from "./dto/reset-password.dto";
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { CurrentUser } from "./decorators/current.user.decorator";
 import { User } from "../users/user.entity";
@@ -18,6 +29,7 @@ export class AuthController {
     /**
      * Logs the user in with email and password
      */
+    @Throttle([{ limit: 5, ttl: 60000 }]) // 5 attempts per minute
     @UseGuards(LocalAuthGuard)
     @ApiBody({
         schema: {
@@ -39,31 +51,38 @@ export class AuthController {
         return { accessToken };
     }
 
+    @Throttle([{ limit: 3, ttl: 3600000 }]) // 3 attempts per hour
     @Post("register")
-    async register(
-        @Body() createUserDto: CreateUserDto,
-        @Res({ passthrough: true }) res
-    ): Promise<RegisterResponse> {
+    async register(@Body() createUserDto: CreateUserDto): Promise<RegisterResponse> {
         const response = await this.authService.register(createUserDto);
 
         if (response["error"]) {
-            res.status(200);
+            if (response["error"] === "EMAIL_EXISTS") {
+                throw new ConflictException("Email already exists");
+            }
+            throw new BadRequestException("Registration failed");
         }
 
         return response;
     }
 
+    @Throttle([{ limit: 3, ttl: 3600000 }]) // 3 attempts per hour
     @Post("invite/:inviteCode")
     async registerWithInvite(
-        @Body() createUserDto: CreateUserDto,
-        @Res({ passthrough: true }) res
+        @Body() createUserDto: CreateUserDto
     ): Promise<RegisterResponse> {
         const response = await this.authService.registerWithInvite(
             createUserDto
         );
 
         if (response["error"]) {
-            res.status(200);
+            if (response["error"] === "EMAIL_EXISTS") {
+                throw new ConflictException("Email already exists");
+            }
+            if (response["error"] === "INVALID_INVITE_CODE") {
+                throw new BadRequestException("Invalid invite code");
+            }
+            throw new BadRequestException("Registration failed");
         }
 
         return response;
@@ -73,8 +92,7 @@ export class AuthController {
     @Post("invite/:inviteCode/join")
     async joinInvitation(
         @Param("inviteCode") inviteCode: string,
-        @CurrentUser() user: User,
-        @Res({ passthrough: true }) res
+        @CurrentUser() user: User
     ): Promise<RegisterResponse> {
         const response = await this.authService.joinInvitation({
             inviteCode,
@@ -82,10 +100,36 @@ export class AuthController {
         });
 
         if (response["error"]) {
-            res.status(200);
+            if (response["error"] === "INVALID_INVITE_CODE") {
+                throw new BadRequestException("Invalid invite code");
+            }
+            throw new BadRequestException("Failed to join invitation");
         }
 
         return response;
+    }
+
+    @Throttle([{ limit: 3, ttl: 3600000 }]) // 3 attempts per hour
+    @Post("forgot-password")
+    async forgotPassword(
+        @Body() forgotPasswordDto: ForgotPasswordDto
+    ): Promise<{ message: string }> {
+        return this.authService.forgotPassword(forgotPasswordDto.email);
+    }
+
+    @Throttle([{ limit: 3, ttl: 3600000 }]) // 3 attempts per hour
+    @Post("reset-password")
+    async resetPassword(
+        @Body() resetPasswordDto: ResetPasswordDto
+    ): Promise<{ message: string }> {
+        try {
+            return await this.authService.resetPassword(
+                resetPasswordDto.token,
+                resetPasswordDto.newPassword
+            );
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
     }
 }
 

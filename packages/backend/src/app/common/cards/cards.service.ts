@@ -119,6 +119,21 @@ export class CardsService {
         }
 
         if (sortBy && sortOrder) {
+            // Whitelist of allowed sortBy values to prevent SQL injection
+            const allowedSortFields = [
+                "cardLists.order",
+                "card.id",
+                "card.createdAt",
+                "card.updatedAt",
+                "type.name",
+            ];
+
+            if (!allowedSortFields.includes(sortBy)) {
+                throw new Error(
+                    `Invalid sortBy field: ${sortBy}. Allowed fields: ${allowedSortFields.join(", ")}`
+                );
+            }
+
             queryBuilder.addOrderBy(sortBy, sortOrder, "NULLS LAST");
         }
 
@@ -236,6 +251,18 @@ export class CardsService {
         cardTypeId: number;
         workspaceId: number;
     }): Promise<Card[]> {
+        const user = this.clsService.get("user");
+
+        // Verify user has access to the workspace
+        if (!this.aclContext.shouldSkipAcl()) {
+            await this.accessControlService.authorize(
+                user,
+                "workspace",
+                workspaceId,
+                PermissionLevel.VIEWER
+            );
+        }
+
         const titleField = await this.cardsRepository.manager
             .getRepository(Field)
             .findOne({

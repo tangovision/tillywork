@@ -30,6 +30,20 @@ export class CardListsService {
         const order = {};
 
         if (sortBy && sortOrder) {
+            // Whitelist of allowed sortBy values to prevent SQL injection
+            const allowedSortFields = [
+                "id",
+                "order",
+                "createdAt",
+                "updatedAt",
+            ];
+
+            if (!allowedSortFields.includes(sortBy)) {
+                throw new Error(
+                    `Invalid sortBy field: ${sortBy}. Allowed fields: ${allowedSortFields.join(", ")}`
+                );
+            }
+
             order[sortBy] = sortOrder;
         }
 

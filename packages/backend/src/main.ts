@@ -17,6 +17,7 @@ import { contentParser } from "fastify-multer";
 import { trace, context } from "@opentelemetry/api";
 import { TillyLogger } from "./app/common/logger/tilly.logger";
 import { JwtService } from "@nestjs/jwt";
+import helmet from "@fastify/helmet";
 
 async function bootstrap() {
     const logger = new TillyLogger("main.ts");
@@ -24,13 +25,41 @@ async function bootstrap() {
         AppModule,
         new FastifyAdapter(),
         {
-            cors: true,
             logger: logger,
         }
     );
     const configService = app.get(ConfigService);
     const port = configService.get("PORT");
     const environment = configService.get("NODE_ENV");
+    const frontendUrl = configService.get("TW_FRONTEND_URL");
+
+    // In production, TW_FRONTEND_URL must be set for security
+    if (environment === "production" && !frontendUrl) {
+        throw new Error(
+            "TW_FRONTEND_URL environment variable must be set in production"
+        );
+    }
+
+    // Configure CORS to only allow the frontend URL
+    app.enableCors({
+        origin: frontendUrl || "http://localhost:4200",
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    });
+
+    // Add security headers with Helmet
+    await app.register(helmet, {
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                styleSrc: ["'self'", "'unsafe-inline'"],
+                scriptSrc: ["'self'"],
+                imgSrc: ["'self'", "data:", "https:"],
+            },
+        },
+        crossOriginEmbedderPolicy: false, // Allow embedding for Swagger UI
+    });
 
     // Enable API URI Versioning
     app.enableVersioning({
@@ -49,15 +78,25 @@ async function bootstrap() {
 
     app.register(contentParser);
 
-    await SwaggerModule.loadPluginMetadata(metadata);
-    const config = new DocumentBuilder()
-        .setTitle("tillywork API")
-        .setVersion("1.0")
-        .addBearerAuth()
-        .addBasicAuth()
-        .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup("docs", app, document);
+    // Only enable Swagger documentation in development or if explicitly enabled
+    // In production, API docs expose internal structure and should be restricted
+    if (
+        environment !== "production" ||
+        configService.get("TW_ENABLE_SWAGGER") === "true"
+    ) {
+        await SwaggerModule.loadPluginMetadata(metadata);
+        const config = new DocumentBuilder()
+            .setTitle("tillywork API")
+            .setVersion("1.0")
+            .addBearerAuth()
+            .addBasicAuth()
+            .build();
+        const document = SwaggerModule.createDocument(app, config);
+        SwaggerModule.setup("docs", app, document);
+        logger.log("📚 Swagger documentation enabled at /docs");
+    } else {
+        logger.log("🔒 Swagger documentation disabled in production");
+    }
 
     const serverAdapter = new BullFastifyAdapter();
     serverAdapter.setBasePath("/bullmq");
@@ -79,11 +118,28 @@ async function bootstrap() {
         serverAdapter,
     });
 
+    // Add authentication middleware for BullMQ dashboard
+    const jwtService = app.get(JwtService);
     app.getHttpAdapter()
         .getInstance()
         .register(serverAdapter.registerPlugin(), {
             basePath: "/bullmq",
             prefix: "/bullmq",
+            preHandler: async (request, reply) => {
+                const authHeader = request.headers.authorization;
+                if (!authHeader || !authHeader.startsWith("Bearer ")) {
+                    reply.code(401).send({ message: "Unauthorized: No token provided" });
+                    return;
+                }
+
+                const token = authHeader.substring(7);
+                try {
+                    await jwtService.verifyAsync(token);
+                } catch (error) {
+                    reply.code(401).send({ message: "Unauthorized: Invalid token" });
+                    return;
+                }
+            },
         });
 
     // Add OpenTelemetry context middleware
@@ -102,4 +158,9 @@ async function bootstrap() {
     logger.log(`Environment: ${environment}`);
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+    const logger = new TillyLogger("bootstrap");
+    logger.error("Failed to start application", error.stack);
+    logger.error(`Error: ${error.message}`);
+    process.exit(1);
+});
