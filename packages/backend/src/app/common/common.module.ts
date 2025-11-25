@@ -23,6 +23,7 @@ import { UserIntegrationModule } from "./user-integrations/user.integration.modu
 import { CollaborationModule } from "./collaboration/collaboration.module";
 import { SocketModule } from "./sockets/socket.module";
 import { QueueErrorHandlerModule } from "./queues/queue-error-handler.module";
+import { ClickUpImportModule } from "./clickup-import/clickup.import.module";
 
 @Module({
     imports: [
@@ -63,6 +64,7 @@ import { QueueErrorHandlerModule } from "./queues/queue-error-handler.module";
         CollaborationModule,
         SocketModule,
         QueueErrorHandlerModule,
+        ClickUpImportModule,
     ],
     controllers: [],
     providers: [],
