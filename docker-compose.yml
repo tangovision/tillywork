@@ -11,20 +11,9 @@ services:
       - .env
     command: '/start.sh'
     depends_on:
-      - db
       - redis
     volumes:
       - tillywork:/app/uploads
-
-  db:
-    image: postgres:16.3-bullseye
-    volumes:
-      - tillywork:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${TW_DB_NAME}
-      POSTGRES_USER: ${TW_DB_USERNAME}
-      POSTGRES_PASSWORD: ${TW_DB_PASSWORD}
-    restart: unless-stopped
 
   redis:
     image: redis:7.2.5-alpine
