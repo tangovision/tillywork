@@ -73,6 +73,7 @@
         "@excalidraw/excalidraw": "^0.17.6",
         "@faker-js/faker": "^8.4.1",
         "@fastify/helmet": "^13.0.2",
+        "@fastify/multipart": "^9.3.0",
         "@nestjs/common": "^11.1.9",
         "@nestjs/core": "^11.1.9",
         "@nestjs/platform-express": "^11.1.9",

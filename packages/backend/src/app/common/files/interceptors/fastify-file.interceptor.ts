@@ -10,6 +10,30 @@ import {
 import { Observable } from "rxjs";
 import { FastifyRequest } from "fastify";
 
+// Type definitions for @fastify/multipart (augments FastifyRequest when registered)
+interface MultipartFile {
+    type: "file";
+    fieldname: string;
+    filename: string;
+    encoding: string;
+    mimetype: string;
+    file: AsyncIterable<Buffer>;
+}
+
+interface MultipartField {
+    type: "field";
+    fieldname: string;
+    value: unknown;
+}
+
+type MultipartPart = MultipartFile | MultipartField;
+
+// Extend FastifyRequest to include multipart methods added by @fastify/multipart
+interface MultipartRequest extends FastifyRequest {
+    isMultipart: () => boolean;
+    parts: () => AsyncIterableIterator<MultipartPart>;
+}
+
 export interface UploadedFileInfo {
     fieldname: string;
     originalname: string;
@@ -43,7 +67,7 @@ export function FastifyFileInterceptor(
         ): Promise<Observable<any>> {
             const request = context
                 .switchToHttp()
-                .getRequest<FastifyRequest>();
+                .getRequest<MultipartRequest>();
 
             // Check if this is a multipart request
             if (!request.isMultipart()) {
@@ -74,7 +98,7 @@ export function FastifyFileInterceptor(
                                         `File size exceeds maximum allowed size of ${maxSize} bytes`
                                     );
                                 }
-                                chunks.push(chunk);
+                                chunks.push(Buffer.from(chunk as unknown as ArrayBuffer));
                             }
 
                             uploadedFile = {
@@ -82,7 +106,7 @@ export function FastifyFileInterceptor(
                                 originalname: part.filename,
                                 encoding: part.encoding,
                                 mimetype: part.mimetype,
-                                buffer: Buffer.concat(chunks),
+                                buffer: Buffer.concat(chunks as unknown as Uint8Array[]),
                                 size: totalSize,
                             };
                         }
@@ -96,8 +120,9 @@ export function FastifyFileInterceptor(
                 (request as any).file = uploadedFile;
 
                 // Merge fields into body
+                const existingBody = (request.body as Record<string, unknown>) || {};
                 (request as any).body = {
-                    ...(request.body || {}),
+                    ...existingBody,
                     ...fields,
                 };
             } catch (error) {

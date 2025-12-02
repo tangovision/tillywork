@@ -13,7 +13,8 @@ import { getQueueToken } from "@nestjs/bull";
 import { createBullBoard } from "@bull-board/api";
 import { BullAdapter } from "@bull-board/api/bullAdapter";
 import { ConfigService } from "@nestjs/config";
-import multipart from "@fastify/multipart";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const multipart = require("@fastify/multipart");
 import { trace, context } from "@opentelemetry/api";
 import { TillyLogger } from "./app/common/logger/tilly.logger";
 import { JwtService } from "@nestjs/jwt";
@@ -131,11 +132,11 @@ async function bootstrap() {
     const jwtService = app.get(JwtService);
     const fastifyInstance = app.getHttpAdapter().getInstance();
 
-    // Register bull-board plugin with basePath required by v6
+    // Register bull-board plugin - basePath is required by the plugin's type definition
     await fastifyInstance.register(serverAdapter.registerPlugin(), {
         basePath: "/bullmq",
         prefix: "/bullmq",
-    });
+    } as any);
 
     // Add authentication hook for bull-board routes
     fastifyInstance.addHook("onRequest", async (request, reply) => {
