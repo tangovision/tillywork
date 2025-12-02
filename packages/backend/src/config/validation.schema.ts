@@ -16,12 +16,29 @@ export const validationSchema = Joi.object({
     TW_FILE_STORAGE_TYPE: Joi.string().default("local"),
     TW_CDN_URL: Joi.string().optional(),
 
-    /** Database */
-    TW_DB_NAME: Joi.string().required(),
-    TW_DB_HOST: Joi.string().required(),
+    /** Database - Use DATABASE_URL or individual TW_DB_* variables */
+    DATABASE_URL: Joi.string().uri().optional(),
+    TW_DB_NAME: Joi.when("DATABASE_URL", {
+        is: Joi.exist(),
+        then: Joi.string().optional(),
+        otherwise: Joi.string().required(),
+    }),
+    TW_DB_HOST: Joi.when("DATABASE_URL", {
+        is: Joi.exist(),
+        then: Joi.string().optional(),
+        otherwise: Joi.string().required(),
+    }),
     TW_DB_PORT: Joi.number().default(5432),
-    TW_DB_USERNAME: Joi.string().required(),
-    TW_DB_PASSWORD: Joi.string().required(),
+    TW_DB_USERNAME: Joi.when("DATABASE_URL", {
+        is: Joi.exist(),
+        then: Joi.string().optional(),
+        otherwise: Joi.string().required(),
+    }),
+    TW_DB_PASSWORD: Joi.when("DATABASE_URL", {
+        is: Joi.exist(),
+        then: Joi.string().optional(),
+        otherwise: Joi.string().required(),
+    }),
     TW_DB_ENABLE_SSL: Joi.boolean().default(false),
 
     /** Logging */

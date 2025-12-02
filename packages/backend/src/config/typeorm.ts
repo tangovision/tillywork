@@ -169,14 +169,66 @@ const migrations = [
     AddResetTokenToUserTable1733140500000,
 ];
 
+// Parse DATABASE_URL if provided, otherwise use individual env vars
+const getDatabaseConfig = () => {
+    const databaseUrl = process.env.DATABASE_URL;
+
+    if (databaseUrl) {
+        // Parse: postgres://user:password@host:port/database?sslmode=prefer
+        const url = new URL(databaseUrl);
+        const sslMode = url.searchParams.get("sslmode");
+        const enableSsl = sslMode && sslMode !== "disable";
+
+        return {
+            host: url.hostname,
+            port: parseInt(url.port) || 5432,
+            username: url.username,
+            password: url.password,
+            database: url.pathname.slice(1), // Remove leading /
+            ssl: enableSsl ? true : false,
+            extra: enableSsl
+                ? {
+                      ssl: {
+                          // sslmode=prefer means try SSL but don't verify certificate
+                          rejectUnauthorized: sslMode === "require",
+                      },
+                  }
+                : undefined,
+        };
+    }
+
+    // Fallback to individual env vars
+    return {
+        host: `${process.env.TW_DB_HOST}`,
+        port: +(process.env.TW_DB_PORT || 5432),
+        username: `${process.env.TW_DB_USERNAME}`,
+        password: `${process.env.TW_DB_PASSWORD}`,
+        database: `${process.env.TW_DB_NAME}`,
+        ssl: process.env.TW_DB_ENABLE_SSL === "true" ? true : false,
+        extra:
+            process.env.TW_DB_ENABLE_SSL === "true"
+                ? {
+                      ssl: {
+                          rejectUnauthorized:
+                              process.env.TW_DB_SSL_REJECT_UNAUTHORIZED !==
+                              "false",
+                      },
+                  }
+                : undefined,
+    };
+};
+
+const dbConfig = getDatabaseConfig();
+
 const config: TypeOrmModuleOptions = {
     type: "postgres",
-    host: `${process.env.TW_DB_HOST}`,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    port: +process.env.TW_DB_PORT!,
-    username: `${process.env.TW_DB_USERNAME}`,
-    password: `${process.env.TW_DB_PASSWORD}`,
-    database: `${process.env.TW_DB_NAME}`,
+    host: dbConfig.host,
+    port: dbConfig.port,
+    username: dbConfig.username,
+    password: dbConfig.password,
+    database: dbConfig.database,
+    ssl: dbConfig.ssl,
+    extra: dbConfig.extra,
     migrations,
     migrationsRun: true,
     migrationsTransactionMode: "each",
@@ -184,18 +236,6 @@ const config: TypeOrmModuleOptions = {
     logger:
         process.env.TW_ENABLE_QUERY_LOGGING !== "false"
             ? TypeOrmLoggerContainer.ForConnection(true)
-            : undefined,
-    ssl: process.env.TW_DB_ENABLE_SSL === "true" ? true : false,
-    extra:
-        process.env.TW_DB_ENABLE_SSL === "true"
-            ? {
-                  ssl: {
-                      // Only disable certificate verification in development with self-signed certs
-                      // In production, this should be true for security
-                      rejectUnauthorized:
-                          process.env.TW_DB_SSL_REJECT_UNAUTHORIZED !== "false",
-                  },
-              }
             : undefined,
 };
 
