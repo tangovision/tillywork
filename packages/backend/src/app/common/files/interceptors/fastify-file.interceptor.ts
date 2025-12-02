@@ -1,0 +1,117 @@
+import {
+    Injectable,
+    NestInterceptor,
+    ExecutionContext,
+    CallHandler,
+    BadRequestException,
+    Type,
+    mixin,
+} from "@nestjs/common";
+import { Observable } from "rxjs";
+import { FastifyRequest } from "fastify";
+
+export interface UploadedFileInfo {
+    fieldname: string;
+    originalname: string;
+    encoding: string;
+    mimetype: string;
+    buffer: Buffer;
+    size: number;
+}
+
+export interface FastifyFileInterceptorOptions {
+    fieldName?: string;
+    maxFileSize?: number;
+}
+
+/**
+ * Creates a file interceptor for Fastify 5 using @fastify/multipart.
+ * This replaces @nest-lab/fastify-multer's FileInterceptor which doesn't support Fastify 5.
+ *
+ * Usage:
+ * @UseInterceptors(FastifyFileInterceptor('file', { maxFileSize: 50 * 1024 * 1024 }))
+ */
+export function FastifyFileInterceptor(
+    fieldName: string = "file",
+    options: FastifyFileInterceptorOptions = {}
+): Type<NestInterceptor> {
+    @Injectable()
+    class MixinInterceptor implements NestInterceptor {
+        async intercept(
+            context: ExecutionContext,
+            next: CallHandler
+        ): Promise<Observable<any>> {
+            const request = context
+                .switchToHttp()
+                .getRequest<FastifyRequest>();
+
+            // Check if this is a multipart request
+            if (!request.isMultipart()) {
+                throw new BadRequestException(
+                    "Request must be multipart/form-data"
+                );
+            }
+
+            try {
+                // Parse the multipart data
+                const parts = request.parts();
+                const fields: Record<string, any> = {};
+                let uploadedFile: UploadedFileInfo | null = null;
+
+                for await (const part of parts) {
+                    if (part.type === "file") {
+                        if (part.fieldname === fieldName) {
+                            // Check file size if limit is set
+                            const maxSize =
+                                options.maxFileSize || 50 * 1024 * 1024; // Default 50MB
+                            const chunks: Buffer[] = [];
+                            let totalSize = 0;
+
+                            for await (const chunk of part.file) {
+                                totalSize += chunk.length;
+                                if (totalSize > maxSize) {
+                                    throw new BadRequestException(
+                                        `File size exceeds maximum allowed size of ${maxSize} bytes`
+                                    );
+                                }
+                                chunks.push(chunk);
+                            }
+
+                            uploadedFile = {
+                                fieldname: part.fieldname,
+                                originalname: part.filename,
+                                encoding: part.encoding,
+                                mimetype: part.mimetype,
+                                buffer: Buffer.concat(chunks),
+                                size: totalSize,
+                            };
+                        }
+                    } else {
+                        // It's a field
+                        fields[part.fieldname] = part.value;
+                    }
+                }
+
+                // Attach file to request (for @UploadedFile decorator compatibility)
+                (request as any).file = uploadedFile;
+
+                // Merge fields into body
+                (request as any).body = {
+                    ...(request.body || {}),
+                    ...fields,
+                };
+            } catch (error) {
+                if (error instanceof BadRequestException) {
+                    throw error;
+                }
+                throw new BadRequestException(
+                    `Failed to parse multipart data: ${error.message}`
+                );
+            }
+
+            return next.handle();
+        }
+    }
+
+    return mixin(MixinInterceptor);
+}

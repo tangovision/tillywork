@@ -4,14 +4,12 @@ import {
     Body,
     UseGuards,
     UseInterceptors,
-    UploadedFile,
-    ParseFilePipe,
-    MaxFileSizeValidator,
     BadRequestException,
     Logger,
+    Req,
 } from "@nestjs/common";
-import { FileInterceptor } from "@nest-lab/fastify-multer";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { FastifyRequest } from "fastify";
 
 import { JwtAuthGuard } from "../auth/guards/jwt.auth.guard";
 import { ClickUpImportService } from "./services/clickup.import.service";
@@ -20,7 +18,10 @@ import {
     ClickUpImportResult,
     ClickUpImportPreview,
 } from "./types/clickup.types";
-import { FileDto } from "../files/types";
+import {
+    FastifyFileInterceptor,
+    UploadedFileInfo,
+} from "../files/interceptors/fastify-file.interceptor";
 
 /**
  * Controller for ClickUp import operations
@@ -42,7 +43,7 @@ export class ClickUpImportController {
      * Upload a CSV file and get a summary of what will be imported.
      */
     @Post("preview")
-    @UseInterceptors(FileInterceptor("file"))
+    @UseInterceptors(FastifyFileInterceptor("file", { maxFileSize: 50 * 1024 * 1024 }))
     @ApiConsumes("multipart/form-data")
     @ApiBody({
         schema: {
@@ -62,17 +63,12 @@ export class ClickUpImportController {
         },
     })
     async preview(
-        @UploadedFile(
-            new ParseFilePipe({
-                validators: [
-                    new MaxFileSizeValidator({ maxSize: 50 * 1024 * 1024 }), // 50MB max
-                ],
-                fileIsRequired: true,
-            })
-        )
-        file: FileDto,
+        @Req() request: FastifyRequest,
         @Body() previewDto: ClickUpPreviewDto
     ): Promise<ClickUpImportPreview> {
+        // File is attached to request by FastifyFileInterceptor
+        const file = (request as any).file as UploadedFileInfo;
+
         this.logger.log(
             `Previewing ClickUp import for workspace ${previewDto.workspaceId}`
         );
@@ -99,7 +95,7 @@ export class ClickUpImportController {
      * Upload a CSV file and import tasks into the specified workspace.
      */
     @Post("import")
-    @UseInterceptors(FileInterceptor("file"))
+    @UseInterceptors(FastifyFileInterceptor("file", { maxFileSize: 50 * 1024 * 1024 }))
     @ApiConsumes("multipart/form-data")
     @ApiBody({
         schema: {
@@ -144,17 +140,12 @@ export class ClickUpImportController {
         },
     })
     async import(
-        @UploadedFile(
-            new ParseFilePipe({
-                validators: [
-                    new MaxFileSizeValidator({ maxSize: 50 * 1024 * 1024 }), // 50MB max
-                ],
-                fileIsRequired: true,
-            })
-        )
-        file: FileDto,
+        @Req() request: FastifyRequest,
         @Body() importDto: ClickUpImportDto
     ): Promise<ClickUpImportResult> {
+        // File is attached to request by FastifyFileInterceptor
+        const file = (request as any).file as UploadedFileInfo;
+
         this.logger.log(
             `Starting ClickUp import for workspace ${importDto.workspaceId}`
         );

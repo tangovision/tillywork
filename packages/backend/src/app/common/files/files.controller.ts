@@ -1,27 +1,27 @@
 import {
     Controller,
     Get,
-    MaxFileSizeValidator,
     NotFoundException,
     Param,
-    ParseFilePipe,
     Post,
     Request,
     Response,
-    UploadedFile,
     UseGuards,
     UseInterceptors,
+    BadRequestException,
 } from "@nestjs/common";
 import { FilesService } from "./files.service";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../auth/guards/jwt.auth.guard";
-import { FileInterceptor } from "@nest-lab/fastify-multer";
-import { FileDto } from "./types";
 import { UploadLimitInterceptor } from "./interceptors/upload.limit.interceptor";
-import { FileTypeValidator } from "./validators/file-type.validator";
+import {
+    FastifyFileInterceptor,
+    UploadedFileInfo,
+} from "./interceptors/fastify-file.interceptor";
+import { validateFileType } from "./validators/file-type.validator";
 import { createReadStream, existsSync } from "fs";
 import { join } from "path";
-import { FastifyReply } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 
 // Allowlist of safe MIME types - executables and scripts are explicitly excluded
 const ALLOWED_MIME_TYPES = [
@@ -102,28 +102,34 @@ export class FilesController {
 
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    @UseInterceptors(FileInterceptor("file"), UploadLimitInterceptor)
+    @UseInterceptors(
+        FastifyFileInterceptor("file", { maxFileSize: 5 * 1024 * 1024 }),
+        UploadLimitInterceptor
+    )
     @Post()
-    async uploadFile(
-        @Request() req,
-        @UploadedFile(
-            new ParseFilePipe({
-                validators: [
-                    new MaxFileSizeValidator({
-                        maxSize: 5 * 1024 * 1024,
-                        message: "FILE_SIZE_LIMIT",
-                    }),
-                    new FileTypeValidator({
-                        allowedMimeTypes: ALLOWED_MIME_TYPES,
-                    }),
-                ],
-            })
-        )
-        file: FileDto
-    ) {
-        const { user } = req;
+    async uploadFile(@Request() req: FastifyRequest) {
+        const file = (req as any).file as UploadedFileInfo;
+        const user = (req as any).user;
+
+        if (!file) {
+            throw new BadRequestException("File is required");
+        }
+
+        // Validate file type using magic number verification
+        await validateFileType(file, ALLOWED_MIME_TYPES);
+
+        // Convert UploadedFileInfo to FileDto format expected by FilesService
+        const fileDto = {
+            fieldname: file.fieldname,
+            originalname: file.originalname,
+            encoding: file.encoding,
+            mimetype: file.mimetype,
+            buffer: file.buffer,
+            size: file.size,
+        };
+
         return this.filesService.uploadFile({
-            file,
+            file: fileDto,
             createdBy: user,
         });
     }

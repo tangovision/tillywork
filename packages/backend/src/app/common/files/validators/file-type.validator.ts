@@ -1,6 +1,7 @@
-import { FileValidator } from '@nestjs/common';
+import { FileValidator, BadRequestException } from '@nestjs/common';
 import { fileTypeFromBuffer } from 'file-type';
 import { FileDto } from '../types';
+import { UploadedFileInfo } from '../interceptors/fastify-file.interceptor';
 
 export interface FileTypeValidatorOptions {
     allowedMimeTypes: string[];
@@ -69,6 +70,59 @@ export class FileTypeValidator extends FileValidator<FileTypeValidatorOptions> {
         }
 
         return true;
+    }
+}
+
+/**
+ * Standalone function to validate file type for use with FastifyFileInterceptor.
+ * Throws BadRequestException if validation fails.
+ */
+export async function validateFileType(
+    file: UploadedFileInfo,
+    allowedMimeTypes: string[]
+): Promise<void> {
+    if (!file) {
+        throw new BadRequestException('File is required');
+    }
+
+    const { mimetype, buffer } = file;
+
+    // First check: Validate claimed MIME type is in allowlist
+    if (!allowedMimeTypes.includes(mimetype)) {
+        throw new BadRequestException(
+            `File type not allowed. Allowed types: ${allowedMimeTypes.join(', ')}`
+        );
+    }
+
+    // Second check: Verify actual file content using magic numbers
+    if (buffer) {
+        try {
+            const detectedType = await fileTypeFromBuffer(new Uint8Array(buffer));
+
+            if (detectedType) {
+                // Check if detected MIME type is in our allowlist
+                if (!allowedMimeTypes.includes(detectedType.mime)) {
+                    throw new BadRequestException(
+                        'File content does not match an allowed type'
+                    );
+                }
+
+                // Ensure claimed type category matches detected type category
+                const claimedCategory = mimetype.split('/')[0];
+                const detectedCategory = detectedType.mime.split('/')[0];
+
+                if (claimedCategory !== detectedCategory) {
+                    throw new BadRequestException(
+                        'File MIME type category mismatch'
+                    );
+                }
+            }
+        } catch (error) {
+            if (error instanceof BadRequestException) {
+                throw error;
+            }
+            throw new BadRequestException('Failed to validate file type');
+        }
     }
 }
 

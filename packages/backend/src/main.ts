@@ -13,7 +13,7 @@ import { getQueueToken } from "@nestjs/bull";
 import { createBullBoard } from "@bull-board/api";
 import { BullAdapter } from "@bull-board/api/bullAdapter";
 import { ConfigService } from "@nestjs/config";
-import { contentParser } from "fastify-multer";
+import multipart from "@fastify/multipart";
 import { trace, context } from "@opentelemetry/api";
 import { TillyLogger } from "./app/common/logger/tilly.logger";
 import { JwtService } from "@nestjs/jwt";
@@ -21,9 +21,13 @@ import helmet from "@fastify/helmet";
 
 async function bootstrap() {
     const logger = new TillyLogger("main.ts");
+    const fastifyAdapter = new FastifyAdapter({
+        bodyLimit: 10 * 1024 * 1024, // 10MB body limit
+    });
+
     const app = await NestFactory.create<NestFastifyApplication>(
         AppModule,
-        new FastifyAdapter(),
+        fastifyAdapter,
         {
             logger: logger,
         }
@@ -75,7 +79,13 @@ async function bootstrap() {
         })
     );
 
-    app.register(contentParser);
+    // Register @fastify/multipart for file uploads (Fastify 5 compatible)
+    await app.register(multipart, {
+        limits: {
+            fileSize: 50 * 1024 * 1024, // 50MB max file size
+            files: 10, // Max 10 files per request
+        },
+    });
 
     // Only enable Swagger documentation in development or if explicitly enabled
     // In production, API docs expose internal structure and should be restricted
