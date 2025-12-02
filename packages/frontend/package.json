@@ -6,8 +6,9 @@
     "dependencies": {
         "@github/hotkey": "^3.1.1",
         "@mdi/font": "^7.4.47",
-        "@tanstack/vue-query": "^5.31.0",
-        "@tanstack/vue-query-devtools": "^5.32.0",
+        "@tanstack/query-core": "^5.68.1",
+        "@tanstack/vue-query": "^5.68.1",
+        "@tanstack/vue-query-devtools": "^5.68.1",
         "@tanstack/vue-table": "^8.13.2",
         "@tiptap/extension-bubble-menu": "^2.4.0",
         "@tiptap/extension-code-block-lowlight": "^2.4.0",
@@ -40,10 +41,10 @@
         "vue-router": "^4.2.5",
         "vue-tippy": "^6.6.0",
         "vuedraggable": "^4.1.0",
-        "vuetify": "^3.6.6"
+        "vuetify": "^3.11.0"
     },
     "devDependencies": {
-        "unplugin-auto-import": "^0.17.6",
-        "unplugin-vue-router": "^0.8.6"
+        "unplugin-auto-import": "^19.3.0",
+        "unplugin-vue-router": "^0.18.0"
     }
 }

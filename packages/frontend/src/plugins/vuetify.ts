@@ -5,7 +5,8 @@ import { md3 } from 'vuetify/blueprints';
 import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/styles';
 import '@/styles/vuetify.scss';
-import { VNumberInput } from 'vuetify/labs/VNumberInput';
+// VNumberInput is now part of main components in Vuetify 3.6+
+import { VNumberInput } from 'vuetify/components';
 
 const themes = {
   light: {
