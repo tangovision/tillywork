@@ -71,15 +71,9 @@ export class QueueErrorHandlerService implements OnModuleInit {
      */
     private handleFailedJob(queueName: string, job: Job, err: Error) {
         this.logger.error(
-            `[${queueName}] Job ${job.id} failed after ${job.attemptsMade} attempts`,
+            `[${queueName}] Job ${job.id} (${job.name}) failed after ${job.attemptsMade} attempts: ${err.message}`,
             err.stack,
-            {
-                jobId: job.id,
-                jobName: job.name,
-                attempts: job.attemptsMade,
-                data: job.data,
-                failedReason: err.message,
-            }
+            queueName
         );
 
         // TODO: Implement alerting for critical job failures
@@ -93,13 +87,8 @@ export class QueueErrorHandlerService implements OnModuleInit {
      */
     private handleStalledJob(queueName: string, job: Job) {
         this.logger.warn(
-            `[${queueName}] Job ${job.id} stalled - worker may have crashed`,
-            {
-                jobId: job.id,
-                jobName: job.name,
-                data: job.data,
-                processedOn: job.processedOn,
-            }
+            `[${queueName}] Job ${job.id} (${job.name}) stalled - worker may have crashed. Processed on: ${job.processedOn}`,
+            queueName
         );
 
         // Stalled jobs are automatically retried by Bull
@@ -111,12 +100,9 @@ export class QueueErrorHandlerService implements OnModuleInit {
      */
     private handleQueueError(queueName: string, error: Error) {
         this.logger.error(
-            `[${queueName}] Queue error occurred`,
+            `[${queueName}] Queue error occurred: ${error.message}`,
             error.stack,
-            {
-                errorMessage: error.message,
-                errorName: error.name,
-            }
+            queueName
         );
 
         // TODO: Implement critical alerting for queue infrastructure failures
@@ -127,13 +113,10 @@ export class QueueErrorHandlerService implements OnModuleInit {
      * Handle successfully completed jobs
      */
     private handleCompletedJob(queueName: string, job: Job) {
+        const duration = job.finishedOn ? job.finishedOn - job.processedOn : 0;
         this.logger.debug(
-            `[${queueName}] Job ${job.id} completed successfully`,
-            {
-                jobId: job.id,
-                jobName: job.name,
-                duration: job.finishedOn ? job.finishedOn - job.processedOn : 0,
-            }
+            `[${queueName}] Job ${job.id} (${job.name}) completed successfully in ${duration}ms`,
+            queueName
         );
 
         // TODO: Implement metrics collection
@@ -147,14 +130,8 @@ export class QueueErrorHandlerService implements OnModuleInit {
      */
     private handleRetryingJob(queueName: string, job: Job, err: Error) {
         this.logger.warn(
-            `[${queueName}] Job ${job.id} retrying (attempt ${job.attemptsMade + 1})`,
-            {
-                jobId: job.id,
-                jobName: job.name,
-                attempt: job.attemptsMade + 1,
-                error: err.message,
-                data: job.data,
-            }
+            `[${queueName}] Job ${job.id} (${job.name}) retrying (attempt ${job.attemptsMade + 1}): ${err.message}`,
+            queueName
         );
     }
 

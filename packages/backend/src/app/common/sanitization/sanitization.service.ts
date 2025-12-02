@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JSDOM } from 'jsdom';
-import createDOMPurify from 'dompurify';
+import createDOMPurify, { DOMPurify } from 'dompurify';
 
 /**
  * Service for sanitizing user input to prevent XSS attacks.
@@ -10,12 +10,13 @@ import createDOMPurify from 'dompurify';
  */
 @Injectable()
 export class SanitizationService {
-    private readonly DOMPurify: ReturnType<typeof createDOMPurify>;
+    private readonly DOMPurify: DOMPurify;
 
     constructor() {
         // Create a JSDOM window for server-side DOMPurify
         const window = new JSDOM('').window;
-        this.DOMPurify = createDOMPurify(window as unknown as Window);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.DOMPurify = createDOMPurify(window as any);
     }
 
     /**
@@ -69,7 +70,7 @@ export class SanitizationService {
             config.ALLOWED_ATTR = options.allowedAttributes;
         }
 
-        return this.DOMPurify.sanitize(dirty, config);
+        return this.DOMPurify.sanitize(dirty, config) as unknown as string;
     }
 
     /**

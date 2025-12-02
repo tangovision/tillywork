@@ -17,8 +17,7 @@ import { contentParser } from "fastify-multer";
 import { trace, context } from "@opentelemetry/api";
 import { TillyLogger } from "./app/common/logger/tilly.logger";
 import { JwtService } from "@nestjs/jwt";
-// NOTE: @fastify/helmet requires Fastify 5.x, but NestJS uses Fastify 4.x
-// Uncomment when upgrading to Fastify 5: import helmet from "@fastify/helmet";
+import helmet from "@fastify/helmet";
 
 async function bootstrap() {
     const logger = new TillyLogger("main.ts");
@@ -49,8 +48,17 @@ async function bootstrap() {
         allowedHeaders: ["Content-Type", "Authorization", "Accept"],
     });
 
-    // NOTE: Helmet security headers disabled - requires Fastify 5.x upgrade
-    // await app.register(helmet, { ... });
+    // Register Helmet for security headers
+    await app.register(helmet, {
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: ["'self'", "'unsafe-inline'"],
+                styleSrc: ["'self'", "'unsafe-inline'"],
+                imgSrc: ["'self'", "data:", "blob:"],
+            },
+        },
+    });
 
     // Enable API URI Versioning
     app.enableVersioning({
@@ -111,27 +119,34 @@ async function bootstrap() {
 
     // Add authentication middleware for BullMQ dashboard
     const jwtService = app.get(JwtService);
-    app.getHttpAdapter()
-        .getInstance()
-        .register(serverAdapter.registerPlugin(), {
-            basePath: "/bullmq",
-            prefix: "/bullmq",
-            preHandler: async (request, reply) => {
-                const authHeader = request.headers.authorization;
-                if (!authHeader || !authHeader.startsWith("Bearer ")) {
-                    reply.code(401).send({ message: "Unauthorized: No token provided" });
-                    return;
-                }
+    const fastifyInstance = app.getHttpAdapter().getInstance();
 
-                const token = authHeader.substring(7);
-                try {
-                    await jwtService.verifyAsync(token);
-                } catch (error) {
-                    reply.code(401).send({ message: "Unauthorized: Invalid token" });
-                    return;
-                }
-            },
-        });
+    // Register bull-board plugin with basePath required by v6
+    await fastifyInstance.register(serverAdapter.registerPlugin(), {
+        basePath: "/bullmq",
+        prefix: "/bullmq",
+    });
+
+    // Add authentication hook for bull-board routes
+    fastifyInstance.addHook("onRequest", async (request, reply) => {
+        if (!request.url.startsWith("/bullmq")) {
+            return;
+        }
+
+        const authHeader = request.headers.authorization;
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            reply.code(401).send({ message: "Unauthorized: No token provided" });
+            return;
+        }
+
+        const token = authHeader.substring(7);
+        try {
+            await jwtService.verifyAsync(token);
+        } catch (error) {
+            reply.code(401).send({ message: "Unauthorized: Invalid token" });
+            return;
+        }
+    });
 
     // Add OpenTelemetry context middleware
     app.use((req, res, next) => {

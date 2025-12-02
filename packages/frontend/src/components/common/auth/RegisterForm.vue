@@ -39,12 +39,23 @@ async function handleRegister() {
     try {
       loading.value = true;
 
+      // Remove empty optional fields to avoid validation errors
+      const payload = {
+        email: createUserDto.value.email,
+        password: createUserDto.value.password,
+        firstName: createUserDto.value.firstName,
+        lastName: createUserDto.value.lastName,
+        ...(createUserDto.value.phoneNumber && { phoneNumber: createUserDto.value.phoneNumber }),
+        ...(createUserDto.value.country && { country: createUserDto.value.country }),
+        ...(createUserDto.value.inviteCode && { inviteCode: createUserDto.value.inviteCode }),
+      };
+
       const response = inviteCode.value
         ? await registerWithInvite({
-            ...createUserDto.value,
+            ...payload,
             inviteCode: inviteCode.value as string,
           })
-        : await register(createUserDto.value);
+        : await register(payload);
       if (response.error) {
         loading.value = false;
       } else {

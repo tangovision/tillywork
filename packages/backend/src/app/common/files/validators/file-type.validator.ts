@@ -40,7 +40,7 @@ export class FileTypeValidator extends FileValidator<FileTypeValidatorOptions> {
         // This prevents MIME type spoofing
         if (buffer) {
             try {
-                const detectedType = await fileTypeFromBuffer(buffer);
+                const detectedType = await fileTypeFromBuffer(new Uint8Array(buffer));
 
                 // If we can detect the file type, verify it matches the claimed type
                 if (detectedType) {

@@ -18,7 +18,7 @@ export class YjsPersistenceService {
         const data = await this.redis.get(`yjs:${docName}`);
         if (data) {
             const doc = new Y.Doc();
-            Y.applyUpdate(doc, Buffer.from(data, "base64"));
+            Y.applyUpdate(doc, new Uint8Array(Buffer.from(data, "base64")));
             return doc;
         }
         return null;

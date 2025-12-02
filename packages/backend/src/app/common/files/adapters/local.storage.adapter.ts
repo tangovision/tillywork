@@ -20,7 +20,7 @@ export class LocalStorageAdapter implements StorageAdapter {
         await fs.mkdir(this.storagePath, { recursive: true });
 
         // Save the file locally
-        await fs.writeFile(filePath, file.buffer);
+        await fs.writeFile(filePath, new Uint8Array(file.buffer));
 
         return fileName;
     }
