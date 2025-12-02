@@ -39,33 +39,21 @@ export class WsExceptionFilter extends BaseWsExceptionFilter {
             }
 
             this.logger.warn(
-                `WebSocket exception: ${error.message}`,
-                {
-                    event: data?.event,
-                    clientId: client.id,
-                }
+                `WebSocket exception: ${error.message} (event: ${data?.event}, clientId: ${client.id})`
             );
         } else if (exception instanceof Error) {
             // Handle standard JavaScript errors
             error.message = exception.message;
 
             this.logger.error(
-                `WebSocket error: ${exception.message}`,
-                exception.stack,
-                {
-                    event: data?.event,
-                    clientId: client.id,
-                }
+                `WebSocket error: ${exception.message} (event: ${data?.event}, clientId: ${client.id})`,
+                exception.stack
             );
         } else {
             // Handle unknown exceptions
             this.logger.error(
-                'Unknown WebSocket exception',
-                String(exception),
-                {
-                    event: data?.event,
-                    clientId: client.id,
-                }
+                `Unknown WebSocket exception (event: ${data?.event}, clientId: ${client.id})`,
+                String(exception)
             );
         }
 

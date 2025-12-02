@@ -10,6 +10,7 @@ import { AutomationsModule } from "../automations/automations.module";
 import { AuthModule } from "../auth/auth.module";
 import { CardsGateway } from "./cards.gateway";
 import { CollaborationModule } from "../collaboration/collaboration.module";
+import { SocketModule } from "../sockets/socket.module";
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { CollaborationModule } from "../collaboration/collaboration.module";
         forwardRef(() => AutomationsModule),
         forwardRef(() => AuthModule),
         forwardRef(() => CollaborationModule),
+        SocketModule,
     ],
     controllers: [CardsController],
     providers: [CardsService, CardSubscriber, CardsGateway],

@@ -203,7 +203,6 @@ export class AuthService {
 
         return { ...user, accessToken };
     }
-}
 
     async forgotPassword(email: string): Promise<{ message: string }> {
         const user = await this.usersService.findOneByEmail(email);
@@ -277,3 +276,4 @@ export class AuthService {
 
         return { message: "Password has been successfully reset" };
     }
+}

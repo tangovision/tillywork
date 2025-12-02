@@ -77,7 +77,6 @@ export class UsersService {
         const user = await this.findOne(id);
         await this.usersRepository.softRemove(user);
     }
-}
 
     async updateResetToken(
         userId: number,
@@ -110,3 +109,4 @@ export class UsersService {
             resetTokenExpiry: null,
         });
     }
+}

@@ -29,7 +29,7 @@ export class AuthController {
     /**
      * Logs the user in with email and password
      */
-    @Throttle([{ limit: 5, ttl: 60000 }]) // 5 attempts per minute
+    @Throttle({ default: { limit: 5, ttl: 60000 } }) // 5 attempts per minute
     @UseGuards(LocalAuthGuard)
     @ApiBody({
         schema: {
@@ -51,7 +51,7 @@ export class AuthController {
         return { accessToken };
     }
 
-    @Throttle([{ limit: 3, ttl: 3600000 }]) // 3 attempts per hour
+    @Throttle({ default: { limit: 3, ttl: 3600000 } }) // 3 attempts per hour
     @Post("register")
     async register(@Body() createUserDto: CreateUserDto): Promise<RegisterResponse> {
         const response = await this.authService.register(createUserDto);
@@ -66,7 +66,7 @@ export class AuthController {
         return response;
     }
 
-    @Throttle([{ limit: 3, ttl: 3600000 }]) // 3 attempts per hour
+    @Throttle({ default: { limit: 3, ttl: 3600000 } }) // 3 attempts per hour
     @Post("invite/:inviteCode")
     async registerWithInvite(
         @Body() createUserDto: CreateUserDto
@@ -109,7 +109,7 @@ export class AuthController {
         return response;
     }
 
-    @Throttle([{ limit: 3, ttl: 3600000 }]) // 3 attempts per hour
+    @Throttle({ default: { limit: 3, ttl: 3600000 } }) // 3 attempts per hour
     @Post("forgot-password")
     async forgotPassword(
         @Body() forgotPasswordDto: ForgotPasswordDto
@@ -117,7 +117,7 @@ export class AuthController {
         return this.authService.forgotPassword(forgotPasswordDto.email);
     }
 
-    @Throttle([{ limit: 3, ttl: 3600000 }]) // 3 attempts per hour
+    @Throttle({ default: { limit: 3, ttl: 3600000 } }) // 3 attempts per hour
     @Post("reset-password")
     async resetPassword(
         @Body() resetPasswordDto: ResetPasswordDto
