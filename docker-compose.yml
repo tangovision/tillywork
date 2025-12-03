@@ -1,3 +1,5 @@
+# Production uses external Redis (set TW_REDIS_HOST in env)
+# For development, docker-compose.override.yml adds local Redis
 services:
   tillywork:
     build:
@@ -9,14 +11,8 @@ services:
     env_file:
       - .env
     command: '/start.sh'
-    depends_on:
-      - redis
     volumes:
       - tillywork:/app/uploads
-
-  redis:
-    image: redis:7.2.5-alpine
-    restart: unless-stopped
 
   tempo:
     image: grafana/tempo:latest

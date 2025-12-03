@@ -1,0 +1,12 @@
+# Development overrides - automatically merged with docker-compose.yml
+# This file is NOT used by Coolify (production)
+services:
+  tillywork:
+    depends_on:
+      - redis
+    environment:
+      - TW_REDIS_HOST=redis
+
+  redis:
+    image: redis:7.2.5-alpine
+    restart: unless-stopped
