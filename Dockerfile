@@ -40,8 +40,8 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-# Install Node.js and PM2 (cached unless Alpine base changes)
-RUN apk add --no-cache nodejs npm && \
+# Install Node.js, PM2, and curl for health checks
+RUN apk add --no-cache nodejs npm curl && \
     npm install pm2 -g && \
     npm cache clean --force
 
@@ -65,9 +65,9 @@ RUN chmod +x /start.sh
 # Expose ports
 EXPOSE 80 3000
 
-# Health check
+# Health check - use curl since it's more reliable in alpine
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD wget -q -O /dev/null http://localhost:3000/v1/auth || exit 1
+    CMD curl -f http://localhost:3000/v1/auth || exit 1
 
 # Run the application
 CMD ["/start.sh"]
