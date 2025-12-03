@@ -67,7 +67,7 @@ EXPOSE 80 3000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD wget -q --spider http://localhost:3000/v1/auth || exit 1
+    CMD wget -q -O /dev/null http://localhost:3000/v1/auth || exit 1
 
 # Run the application
 CMD ["/start.sh"]
