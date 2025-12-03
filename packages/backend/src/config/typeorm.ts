@@ -169,52 +169,28 @@ const migrations = [
     AddResetTokenToUserTable1733140500000,
 ];
 
-// Parse DATABASE_URL if provided, otherwise use individual env vars
+// Parse DATABASE_URL: postgres://user:password@host:port/database?sslmode=prefer
 const getDatabaseConfig = () => {
-    const databaseUrl = process.env.DATABASE_URL;
+    const databaseUrl = process.env.DATABASE_URL!;
+    const url = new URL(databaseUrl);
+    const sslMode = url.searchParams.get("sslmode");
+    const enableSsl = sslMode && sslMode !== "disable";
 
-    if (databaseUrl) {
-        // Parse: postgres://user:password@host:port/database?sslmode=prefer
-        const url = new URL(databaseUrl);
-        const sslMode = url.searchParams.get("sslmode");
-        const enableSsl = sslMode && sslMode !== "disable";
-
-        return {
-            host: url.hostname,
-            port: parseInt(url.port) || 5432,
-            username: url.username,
-            password: url.password,
-            database: url.pathname.slice(1), // Remove leading /
-            ssl: enableSsl ? true : false,
-            extra: enableSsl
-                ? {
-                      ssl: {
-                          // sslmode=prefer means try SSL but don't verify certificate
-                          rejectUnauthorized: sslMode === "require",
-                      },
-                  }
-                : undefined,
-        };
-    }
-
-    // Fallback to individual env vars
     return {
-        host: `${process.env.TW_DB_HOST}`,
-        port: +(process.env.TW_DB_PORT || 5432),
-        username: `${process.env.TW_DB_USERNAME}`,
-        password: `${process.env.TW_DB_PASSWORD}`,
-        database: `${process.env.TW_DB_NAME}`,
-        ssl: process.env.TW_DB_ENABLE_SSL === "true" ? true : false,
-        extra:
-            process.env.TW_DB_ENABLE_SSL === "true"
-                ? {
-                      ssl: {
-                          rejectUnauthorized:
-                              process.env.TW_DB_SSL_REJECT_UNAUTHORIZED !==
-                              "false",
-                      },
-                  }
-                : undefined,
+        host: url.hostname,
+        port: parseInt(url.port) || 5432,
+        username: decodeURIComponent(url.username),
+        password: decodeURIComponent(url.password),
+        database: url.pathname.slice(1), // Remove leading /
+        ssl: enableSsl ? true : false,
+        extra: enableSsl
+            ? {
+                  ssl: {
+                      // sslmode=prefer means try SSL but don't verify certificate
+                      rejectUnauthorized: sslMode === "require",
+                  },
+              }
+            : undefined,
     };
 };
 

@@ -11,35 +11,12 @@ export const validationSchema = Joi.object({
     /** Config */
     TW_FRONTEND_URL: Joi.string().required(),
     TW_SECRET_KEY: Joi.string().required(),
-    TW_REDIS_HOST: Joi.string().required(),
-    TW_REDIS_PORT: Joi.string().required(),
+    REDIS_URL: Joi.string().uri().required(),
     TW_FILE_STORAGE_TYPE: Joi.string().default("local"),
     TW_CDN_URL: Joi.string().optional(),
 
-    /** Database - Use DATABASE_URL or individual TW_DB_* variables */
-    DATABASE_URL: Joi.string().uri().optional(),
-    TW_DB_NAME: Joi.when("DATABASE_URL", {
-        is: Joi.exist(),
-        then: Joi.string().optional(),
-        otherwise: Joi.string().required(),
-    }),
-    TW_DB_HOST: Joi.when("DATABASE_URL", {
-        is: Joi.exist(),
-        then: Joi.string().optional(),
-        otherwise: Joi.string().required(),
-    }),
-    TW_DB_PORT: Joi.number().default(5432),
-    TW_DB_USERNAME: Joi.when("DATABASE_URL", {
-        is: Joi.exist(),
-        then: Joi.string().optional(),
-        otherwise: Joi.string().required(),
-    }),
-    TW_DB_PASSWORD: Joi.when("DATABASE_URL", {
-        is: Joi.exist(),
-        then: Joi.string().optional(),
-        otherwise: Joi.string().required(),
-    }),
-    TW_DB_ENABLE_SSL: Joi.boolean().default(false),
+    /** Database */
+    DATABASE_URL: Joi.string().uri().required(),
 
     /** Logging */
     TW_ENABLE_QUERY_LOGGING: Joi.boolean().default(false),

@@ -8,10 +8,8 @@ export class YjsPersistenceService {
     private redis: Redis;
 
     constructor(private readonly configService: ConfigService) {
-        this.redis = new Redis({
-            host: this.configService.get<string>("TW_REDIS_HOST"),
-            port: this.configService.get<number>("TW_REDIS_PORT"),
-        });
+        const redisUrl = this.configService.get<string>("REDIS_URL")!;
+        this.redis = new Redis(redisUrl);
     }
 
     async loadDocument(docName: string): Promise<Y.Doc | null> {

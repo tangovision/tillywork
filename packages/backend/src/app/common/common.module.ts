@@ -35,12 +35,16 @@ import { ClickUpImportModule } from "./clickup-import/clickup.import.module";
         }),
         BullModule.forRootAsync({
             imports: [ConfigModule],
-            useFactory: async (configService: ConfigService) => ({
-                redis: {
-                    host: configService.get("TW_REDIS_HOST"),
-                    port: configService.get("TW_REDIS_PORT"),
-                },
-            }),
+            useFactory: async (configService: ConfigService) => {
+                const redisUrl = new URL(configService.get("REDIS_URL")!);
+                return {
+                    redis: {
+                        host: redisUrl.hostname,
+                        port: parseInt(redisUrl.port) || 6379,
+                        password: redisUrl.password || undefined,
+                    },
+                };
+            },
             inject: [ConfigService],
         }),
         AuthModule,
