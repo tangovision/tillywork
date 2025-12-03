@@ -95,18 +95,19 @@ export const validationSchema = Joi.object({
             }
             return value;
         }, "Comma-separated IntegrationType enum")
-        .required()
-        .allow(""),
+        .optional()
+        .allow("")
+        .default(""),
     TW_REDIRECT_URL: Joi.string().optional(),
 
     /** Slack */
     TW_SLACK_CLIENT_ID: Joi.when("TW_ENABLED_INTEGRATIONS", {
-        is: Joi.string().pattern(/(^|,)slack($|,)/),
+        is: Joi.string().pattern(/slack/),
         then: Joi.string().required(),
         otherwise: Joi.string().optional(),
     }),
     TW_SLACK_CLIENT_SECRET: Joi.when("TW_ENABLED_INTEGRATIONS", {
-        is: Joi.string().pattern(/(^|,)slack($|,)/),
+        is: Joi.string().pattern(/slack/),
         then: Joi.string().required(),
         otherwise: Joi.string().optional(),
     }),
