@@ -1,5 +1,6 @@
 # Production config - Coolify handles port routing via its proxy
 # For development, docker-compose.override.yml adds local Redis and ports
+# For observability, use: docker compose -f docker-compose.yml -f docker-compose.observability.yml up
 services:
   tillywork:
     build:
@@ -11,39 +12,5 @@ services:
     volumes:
       - tillywork:/app/uploads
 
-  tempo:
-    image: grafana/tempo:latest
-    command: ['-config.file=/etc/tempo.yaml']
-    user: root
-    volumes:
-      - ./tempo.yaml:/etc/tempo.yaml:ro
-      - tempo:/var/tempo
-    ports:
-      - '127.0.0.1:4318:4318'
-
-  loki:
-    image: grafana/loki:latest
-    ports:
-      - '127.0.0.1:3100:3100'
-    command: -config.file=/etc/loki/local-config.yaml
-    volumes:
-      - loki:/loki
-
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - '3001:3000'
-    user: root
-    environment:
-      - GF_SECURITY_ADMIN_USER=${TW_GRAFANA_ADMIN_USER:-admin}
-      - GF_SECURITY_ADMIN_PASSWORD=${TW_GRAFANA_ADMIN_PASSWORD:-admin}
-      - GF_AUTH_ANONYMOUS_ENABLED=false
-    volumes:
-      - ./grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
-      - grafana:/var/lib/grafana
-
 volumes:
   tillywork:
-  tempo:
-  loki:
-  grafana:
