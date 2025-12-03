@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Get,
     Param,
     Post,
     UseGuards,
@@ -25,6 +26,11 @@ import { User } from "../users/user.entity";
 })
 export class AuthController {
     constructor(private authService: AuthService) {}
+
+    @Get()
+    healthCheck(): { status: string } {
+        return { status: "ok" };
+    }
 
     /**
      * Logs the user in with email and password
