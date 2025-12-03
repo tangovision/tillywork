@@ -80,11 +80,11 @@ export const useFields = ({
 
   /** Used in Board and List views, where we display the assignee field independantly of other pinned fields. */
   const pinnedFieldsWithoutAssignee = computed(() =>
-    pinnedFields.value.filter((field) => !field.isAssignee)
+    pinnedFields.value?.filter((field) => !field.isAssignee) ?? []
   );
 
   const filterableFields = computed(() => {
-    const filterableFields = [...fields.value];
+    const filterableFields = [...(fields.value ?? [])];
 
     if (titleField.value) {
       filterableFields.unshift(titleField.value);
@@ -107,7 +107,7 @@ export const useFields = ({
   );
 
   const tableFields = computed(() =>
-    fields.value.filter((field) =>
+    fields.value?.filter((field) =>
       [
         FieldTypes.DROPDOWN,
         FieldTypes.LABEL,
@@ -123,7 +123,7 @@ export const useFields = ({
         FieldTypes.EMAIL,
         FieldTypes.URL,
       ].includes(field.type)
-    )
+    ) ?? []
   );
 
   function sortFieldsByViewColumns(fields: Field[], columns: string[]) {

@@ -73,7 +73,7 @@ const columns = computed<TableColumnDef[]>(() => {
   }
 
   const viewColumns: TableColumnDef[] = sortFieldsByViewColumns(
-    fields.value.filter((field) =>
+    (fields.value ?? []).filter((field) =>
       viewColumnIds.value?.includes(field.id.toString())
     ),
     viewColumnIds.value ?? []
