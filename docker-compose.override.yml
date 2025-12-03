@@ -2,6 +2,9 @@
 # This file is NOT used by Coolify (production)
 services:
   tillywork:
+    ports:
+      - '80:80'
+      - '3000:3000'
     depends_on:
       - redis
     environment:

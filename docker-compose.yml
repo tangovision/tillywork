@@ -1,13 +1,10 @@
-# Production uses external Redis (set TW_REDIS_HOST in env)
-# For development, docker-compose.override.yml adds local Redis
+# Production config - Coolify handles port routing via its proxy
+# For development, docker-compose.override.yml adds local Redis and ports
 services:
   tillywork:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - '80:80'
-      - '3000:3000'
     env_file:
       - .env
     command: '/start.sh'
