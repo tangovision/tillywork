@@ -97,7 +97,7 @@ export const validationSchema = Joi.object({
         }, "Comma-separated IntegrationType enum")
         .required()
         .allow(""),
-    TW_REDIRECT_URL: Joi.string().required(),
+    TW_REDIRECT_URL: Joi.string().optional(),
 
     /** Slack */
     TW_SLACK_CLIENT_ID: Joi.when("TW_ENABLED_INTEGRATIONS", {
