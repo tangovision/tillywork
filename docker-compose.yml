@@ -1,6 +1,5 @@
 services:
   tillywork:
-    image: tillywork/tillywork:latest
     build:
       context: .
       dockerfile: Dockerfile
