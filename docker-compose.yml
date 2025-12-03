@@ -14,8 +14,9 @@ services:
   tempo:
     image: grafana/tempo:latest
     command: ['-config.file=/etc/tempo.yaml']
+    user: root
     volumes:
-      - ./tempo.yaml:/etc/tempo.yaml
+      - ./tempo.yaml:/etc/tempo.yaml:ro
       - tempo:/var/tempo
     ports:
       - '127.0.0.1:4318:4318'
@@ -32,12 +33,13 @@ services:
     image: grafana/grafana:latest
     ports:
       - '3001:3000'
+    user: root
     environment:
       - GF_SECURITY_ADMIN_USER=${TW_GRAFANA_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${TW_GRAFANA_ADMIN_PASSWORD:-admin}
       - GF_AUTH_ANONYMOUS_ENABLED=false
     volumes:
-      - ./grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
       - grafana:/var/lib/grafana
 
 volumes:
