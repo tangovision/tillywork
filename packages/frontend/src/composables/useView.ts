@@ -22,7 +22,9 @@ export const useView = ({
   const { getCards } = useCardsService();
 
   const allQueries = computed(() => {
-    return toValue(groups).map((group) => {
+    const groupsValue = toValue(groups);
+    if (!groupsValue?.length) return [];
+    return groupsValue.map((group) => {
       const query = useInfiniteQuery({
         queryFn: ({ pageParam = 1 }) =>
           getCards({
