@@ -121,7 +121,7 @@ const noGroupBanners = computed(() => props.groups.length < 2);
 
 watchEffect(() => {
   const { groups } = props;
-  if (groups) {
+  if (groups?.length) {
     const state: Record<string, boolean> = {};
     groups.forEach((listGroup) => {
       state[listGroup.id] = listGroup.isExpanded ?? false;
