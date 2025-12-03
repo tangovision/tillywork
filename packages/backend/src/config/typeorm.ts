@@ -171,8 +171,23 @@ const migrations = [
 
 // Parse DATABASE_URL: postgres://user:password@host:port/database?sslmode=prefer
 const getDatabaseConfig = () => {
-    const databaseUrl = process.env.DATABASE_URL!;
-    const url = new URL(databaseUrl);
+    const databaseUrl = process.env.DATABASE_URL;
+    if (!databaseUrl) {
+        throw new Error(
+            "DATABASE_URL environment variable is required. " +
+                "Format: postgres://user:password@host:port/database?sslmode=prefer"
+        );
+    }
+
+    let url: URL;
+    try {
+        url = new URL(databaseUrl);
+    } catch {
+        throw new Error(
+            `Invalid DATABASE_URL format: "${databaseUrl}". ` +
+                "Expected: postgres://user:password@host:port/database?sslmode=prefer"
+        );
+    }
     const sslMode = url.searchParams.get("sslmode");
     const enableSsl = sslMode && sslMode !== "disable";
 
