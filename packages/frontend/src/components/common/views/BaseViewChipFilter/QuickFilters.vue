@@ -164,9 +164,9 @@ watch(
     if (areTheyNotEqual) {
       if (v.and) {
         const activeFiltersMapping: Record<string, FieldFilter[]> = {};
-        v.and?.forEach((filter) => {
+        (v.and ?? []).forEach((filter) => {
           const filterGroup = filter as FilterGroup;
-          filterGroup.or?.forEach((filter) => {
+          (filterGroup.or ?? []).forEach((filter) => {
             const fieldFilter = filter as FieldFilter;
             const quickFilterGroup = quickFilterOptions.value.find(
               (option) => option.field === fieldFilter.field

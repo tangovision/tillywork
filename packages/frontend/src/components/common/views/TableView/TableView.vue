@@ -123,7 +123,7 @@ watchEffect(() => {
   const { groups } = props;
   if (groups?.length) {
     const state: Record<string, boolean> = {};
-    groups.forEach((listGroup) => {
+    (groups ?? []).forEach((listGroup) => {
       state[listGroup.id] = listGroup.isExpanded ?? false;
     });
     expandedState.value = state;

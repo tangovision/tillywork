@@ -29,7 +29,7 @@ export function useMentionNotifications() {
       if (node?.type === 'mention') {
         mentions.add(node.attrs.id);
       }
-      if (node?.content) {
+      if (node?.content && Array.isArray(node.content)) {
         node.content.forEach(traverse);
       }
     }
