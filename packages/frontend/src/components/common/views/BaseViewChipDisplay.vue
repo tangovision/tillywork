@@ -30,7 +30,7 @@ const { titleField, tableFields } = storeToRefs(useFieldQueryStore());
 const enabledTableColumns = computed({
   get() {
     return sortFieldsByViewColumns(
-      tableFields.value?.filter((field) => isColumnEnabledInView(field)),
+      (tableFields.value ?? []).filter((field) => isColumnEnabledInView(field)),
       view.value.options.columns ?? []
     );
   },
@@ -49,7 +49,7 @@ const enabledTableColumns = computed({
 });
 
 const disabledTableColumns = computed(() =>
-  tableFields.value?.filter((field) => !isColumnEnabledInView(field))
+  (tableFields.value ?? []).filter((field) => !isColumnEnabledInView(field))
 );
 
 function handleToggleCompleted() {

@@ -39,7 +39,7 @@ const { filterableFields } = storeToRefs(useFieldQueryStore());
 const { getFieldMenuItem } = useFieldContextMenu();
 
 const fieldOptions = computed<ContextMenuItem[]>(() => {
-  return filterableFields.value.map((field) =>
+  return (filterableFields.value ?? []).map((field) =>
     getFieldMenuItem({
       field,
       action: () => handleSelectField(field),
@@ -335,7 +335,7 @@ watchEffect(() => {
 
 watchEffect(() => {
   if (!selectedField.value && filter.value.field !== '') {
-    const field = filterableFields.value.find(
+    const field = (filterableFields.value ?? []).find(
       (f) => f.slug === filter.value.field?.split('.').pop()
     );
 
