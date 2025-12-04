@@ -225,7 +225,7 @@ export const useCommandStore = defineStore('command', () => {
         });
       }
 
-      const fieldCommands = fields.value
+      const fieldCommands = (fields.value ?? [])
         .filter(
           (f) =>
             !f.isAssignee &&

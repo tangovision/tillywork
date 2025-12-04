@@ -53,8 +53,8 @@ const quickFilterOptions = computed<QuickFilter>(() => {
     });
   }
 
-  props.fields
-    ?.map((x) => x)
+  (props.fields ?? [])
+    .map((x) => x)
     .sort((a, b) => a.type.localeCompare(b.type))
     .forEach((field) => {
       if (quickFilterGroupsCustomFields.includes(field.type)) {
@@ -164,7 +164,7 @@ watch(
     if (areTheyNotEqual) {
       if (v.and) {
         const activeFiltersMapping: Record<string, FieldFilter[]> = {};
-        v.and.forEach((filter) => {
+        v.and?.forEach((filter) => {
           const filterGroup = filter as FilterGroup;
           filterGroup.or?.forEach((filter) => {
             const fieldFilter = filter as FieldFilter;

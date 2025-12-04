@@ -58,7 +58,7 @@ const fields = computed(() => {
   }
 
   if (filterableFields.value) {
-    filterableFields.value.forEach((field) => {
+    filterableFields.value?.forEach((field) => {
       fields.push({
         field: `card.data.${field.slug}`,
         title: field.name,
