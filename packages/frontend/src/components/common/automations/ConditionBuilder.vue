@@ -360,14 +360,15 @@ watchEffect(() => {
 watchEffect(() => {
   if (filter.value.value && selectedField.value && !selectedItem.value) {
     let newValue: unknown;
+    const filterValues = Array.isArray(filter.value.value) ? filter.value.value : [filter.value.value];
 
     if (isUserItem.value) {
       newValue =
-        users.value?.filter((user) => filter.value.value.includes(user.id)) ??
+        users.value?.filter((user) => filterValues.includes(user.id)) ??
         null;
     } else {
       newValue = selectedField.value.items?.find((item) =>
-        filter.value.value.includes(item.item)
+        filterValues.includes(item.item)
       );
     }
 

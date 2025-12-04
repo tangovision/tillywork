@@ -99,11 +99,11 @@ const searchedUsers = computed(() => {
 // Methods
 function toggleUserSelection(user: User) {
   if (props.multiple) {
-    const index = selectedUsers.value.findIndex((u) => u.id === user.id);
+    const index = (selectedUsers.value ?? []).findIndex((u) => u.id === user.id);
     if (index === -1) {
-      selectedUsers.value = [...selectedUsers.value, user];
+      selectedUsers.value = [...(selectedUsers.value ?? []), user];
     } else {
-      selectedUsers.value = selectedUsers.value.filter((u) => u.id !== user.id);
+      selectedUsers.value = (selectedUsers.value ?? []).filter((u) => u.id !== user.id);
     }
   } else {
     selectedUsers.value = isUserSelected(user) ? [] : [user];
@@ -112,7 +112,7 @@ function toggleUserSelection(user: User) {
 }
 
 function isUserSelected(user: User): boolean {
-  return selectedUsers.value.some((u) => u.id === user.id);
+  return (selectedUsers.value ?? []).some((u) => u.id === user.id);
 }
 
 function getSelectedUsersFromModel(): User[] {

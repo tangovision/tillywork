@@ -43,7 +43,7 @@ const modules = [
 ];
 const selectedModules = ref([]);
 const selectedModuleNames = computed(() =>
-  selectedModules.value.map((index) => modules[index])
+  (selectedModules.value ?? []).map((index) => modules[index])
 );
 
 function submitStepTwo() {

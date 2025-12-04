@@ -48,15 +48,15 @@ export function useInputs(props: UseInputsProps, emit: UseInputsEmit) {
   });
 
   function isItemSelected(item: FieldItem): boolean {
-    return selected.value.includes(item.item);
+    return (selected.value ?? []).includes(item.item);
   }
 
   function toggleItemSelection(item: FieldItem): void {
     let newSelected: string[];
     if (props.multiple) {
       newSelected = isItemSelected(item)
-        ? selected.value.filter((label) => label !== item.item)
-        : [...selected.value, item.item];
+        ? (selected.value ?? []).filter((label) => label !== item.item)
+        : [...(selected.value ?? []), item.item];
     } else {
       newSelected = isItemSelected(item) ? [] : [item.item];
     }

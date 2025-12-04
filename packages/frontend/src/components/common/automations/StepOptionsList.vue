@@ -32,19 +32,19 @@ const { containerRef, activeIndex } = useListKeyboardNavigation({});
 const filteredTriggerOptions = computed<AutomationHandlerMetadata[]>(() => {
   // Each time the options change, reset keyboard navigation position
   activeIndex.value =
-    options.value.findIndex((option) =>
+    (options.value ?? []).findIndex((option) =>
       isOptionSelected(option.value as TriggerType)
     ) ?? 0;
 
-  if (!optionSearch.value) return options.value;
+  if (!optionSearch.value) return options.value ?? [];
 
-  return options.value.filter((option) =>
+  return (options.value ?? []).filter((option) =>
     stringUtils.fuzzySearch(optionSearch.value, option.title)
   );
 });
 
 const triggerOptionsBySection = computed(() => {
-  return filteredTriggerOptions.value.reduce((sections, option) => {
+  return (filteredTriggerOptions.value ?? []).reduce((sections, option) => {
     const section = option.section;
     if (!sections[section]) {
       sections[section] = [];
@@ -54,7 +54,7 @@ const triggerOptionsBySection = computed(() => {
   }, {} as Record<string, AutomationHandlerMetadata[]>);
 });
 
-const showNoResults = computed(() => !filteredTriggerOptions.value.length);
+const showNoResults = computed(() => !(filteredTriggerOptions.value ?? []).length);
 
 const isOptionSelected = (optionValue: TriggerType | ActionType) => {
   return optionValue === step.value?.value;
