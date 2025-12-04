@@ -57,14 +57,12 @@ const maxHeight = computed(() =>
 
 const filters = computed<QueryFilter>(() => {
   if (props.view.filters) {
+    const viewFilter = props.view.filters as ViewFilter;
     const viewFilters = {
       where: {
         and: [
-          ...(cloneDeep((props.view.filters as ViewFilter).where.quick?.and) ??
-            []),
-          ...(cloneDeep(
-            (props.view.filters as ViewFilter).where.advanced?.and
-          ) ?? []),
+          ...(cloneDeep(viewFilter.where?.quick?.and) ?? []),
+          ...(cloneDeep(viewFilter.where?.advanced?.and) ?? []),
         ],
       },
     };

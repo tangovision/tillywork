@@ -34,11 +34,16 @@ watch(
 );
 
 const filters = computed<QueryFilter>(() => {
+  if (!view.filters) {
+    return {};
+  }
+
+  const viewFilter = view.filters as ViewFilter;
   const viewFilters = {
     where: {
       and: [
-        ...(cloneDeep((view.filters as ViewFilter).where.quick?.and) ?? []),
-        ...(cloneDeep((view.filters as ViewFilter).where.advanced?.and) ?? []),
+        ...(cloneDeep(viewFilter.where?.quick?.and) ?? []),
+        ...(cloneDeep(viewFilter.where?.advanced?.and) ?? []),
       ],
     },
   };
@@ -70,7 +75,7 @@ const {
 
 const allCards = computed(() => {
   const cards: Card[] = [];
-  cardPages.value?.pages.forEach((page: CardsData) => {
+  cardPages.value?.pages?.forEach((page: CardsData) => {
     cards.push(...page.cards);
   });
   return cards;
