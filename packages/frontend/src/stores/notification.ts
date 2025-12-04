@@ -9,7 +9,7 @@ export const useNotificationStore = defineStore('notification', () => {
     workspaceId: computed(() => Number(workspace.value?.id)),
   });
   const unreadNotifications = computed(() => {
-    return notifications.value?.filter((notification) => !notification.isRead)
+    return (notifications.value ?? []).filter((notification) => !notification.isRead)
       .length;
   });
 

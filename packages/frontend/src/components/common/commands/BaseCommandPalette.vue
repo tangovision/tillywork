@@ -32,9 +32,9 @@ const { currentKeyCombo } = useKeyboardShortcuts();
 
 const filteredCommands = computed(() => {
   const searchTerm = search.value.toLowerCase();
-  if (!searchTerm) return commands.value;
+  if (!searchTerm) return commands.value ?? [];
 
-  return commands.value.filter((command) => {
+  return (commands.value ?? []).filter((command) => {
     const matchTitle = command.title.toLowerCase().includes(searchTerm);
     const matchShortcut = command.shortcut
       ?.join('+')
@@ -46,7 +46,7 @@ const filteredCommands = computed(() => {
 });
 
 const groupedCommands = computed(() => {
-  return filteredCommands.value.reduce((groups, command) => {
+  return (filteredCommands.value ?? []).reduce((groups, command) => {
     const section = command.section;
     if (!groups[section]) {
       groups[section] = [];
@@ -122,7 +122,7 @@ function handleAfterLeave() {
 function handleShortcut(event: KeyboardEvent) {
   if (isInputFocused.value) return;
 
-  const command = commands.value.find(
+  const command = (commands.value ?? []).find(
     (c) =>
       c.shortcut && c.shortcut.join('+').toUpperCase() === currentKeyCombo.value
   );
