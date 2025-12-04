@@ -40,7 +40,7 @@ const dropdownOptions = computed(() => {
   switch (filter.value.field) {
     case 'listStage.id':
       return (
-        listStages.value.map((listStage) => {
+        listStages.value?.map((listStage) => {
           return {
             title: listStage.name,
             value: listStage.id,

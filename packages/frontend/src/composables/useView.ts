@@ -56,7 +56,7 @@ export const useView = ({
   // Get all cards from all queries
   const allCards = computed(() => {
     const cards: Card[] = [];
-    allQueries.value.forEach((query) => {
+    allQueries.value?.forEach((query) => {
       const pages = query.data?.value?.pages;
       if (pages) {
         pages.forEach((page: CardsData) => {

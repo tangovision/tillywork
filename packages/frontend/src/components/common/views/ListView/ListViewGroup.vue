@@ -151,8 +151,8 @@ watch(
   data,
   (v) => {
     if (v) {
-      cards.value = v?.pages.map((page) => page.cards).flat() ?? [];
-      total.value = v?.pages[0].total ?? 0;
+      cards.value = v?.pages?.map((page) => page.cards).flat() ?? [];
+      total.value = v?.pages?.[0]?.total ?? 0;
       draggableCards.value = groupTable.getCoreRowModel().rows;
     }
   },
