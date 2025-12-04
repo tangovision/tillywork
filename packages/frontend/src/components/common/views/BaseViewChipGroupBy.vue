@@ -28,7 +28,7 @@ const groupByOptions = computed(() => {
   }
 
   if (groupableFields.value) {
-    groupableFields.value?.forEach((field) => {
+    (groupableFields.value ?? []).forEach((field) => {
       arr.push({
         label: field.name,
         value: ListGroupOptions.FIELD,

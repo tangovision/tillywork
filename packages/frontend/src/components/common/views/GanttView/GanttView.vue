@@ -75,7 +75,7 @@ const {
 
 const allCards = computed(() => {
   const cards: Card[] = [];
-  cardPages.value?.pages?.forEach((page: CardsData) => {
+  (cardPages.value?.pages ?? []).forEach((page: CardsData) => {
     cards.push(...page.cards);
   });
   return cards;

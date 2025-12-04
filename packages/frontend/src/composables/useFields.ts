@@ -80,7 +80,7 @@ export const useFields = ({
 
   /** Used in Board and List views, where we display the assignee field independantly of other pinned fields. */
   const pinnedFieldsWithoutAssignee = computed(() =>
-    pinnedFields.value.filter((field) => !field.isAssignee)
+    (pinnedFields.value ?? []).filter((field) => !field.isAssignee)
   );
 
   const filterableFields = computed(() => {

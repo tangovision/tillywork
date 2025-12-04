@@ -28,7 +28,7 @@ const sortByOptions = computed(() => {
   }
 
   if (groupableFields) {
-    groupableFields.value?.forEach((field) => {
+    (groupableFields.value ?? []).forEach((field) => {
       arr.push({
         label: field.name,
         icon: field.icon,
