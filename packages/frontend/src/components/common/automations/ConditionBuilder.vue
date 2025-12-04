@@ -344,7 +344,7 @@ watchEffect(() => {
 
   if (!filteringOption.value && filter.value.operator) {
     const filteringOptionToUse = mapFilterOperatorToFileringOption();
-    const option = filteringOptionMenuItems.value.find(
+    const option = (filteringOptionMenuItems.value ?? []).find(
       (option) => option.value === filteringOptionToUse
     );
 

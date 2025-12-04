@@ -53,7 +53,7 @@ const stepLabel = computed(() => {
       return 'Select a trigger';
     }
 
-    const selectedOption = triggers.value.find(
+    const selectedOption = (triggers.value ?? []).find(
       (trigger) => trigger.value === step.value.value
     );
 
@@ -64,7 +64,7 @@ const stepLabel = computed(() => {
     return 'Select an action';
   }
 
-  const selectedOption = actions.value.find(
+  const selectedOption = (actions.value ?? []).find(
     (t) => t.value === step.value.value
   );
   return selectedOption?.title || 'Unknown action';

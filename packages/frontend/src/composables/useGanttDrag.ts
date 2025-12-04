@@ -68,7 +68,7 @@ export const useGanttDrag = (
       const cardId = clickedRow.getAttribute('data-card-id');
       if (!cardId) return;
 
-      const card = allCards.value.find((c) => c.id === +cardId);
+      const card = (allCards.value ?? []).find((c) => c.id === +cardId);
 
       if (card) {
         handleRowClick(e, card);

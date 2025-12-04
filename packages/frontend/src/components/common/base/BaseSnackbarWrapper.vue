@@ -10,7 +10,7 @@ const snackbarHeight = 44;
 const snackbarMargin = 8;
 
 const snackbarOffsets = computed(() => {
-  return snackbars.value.map((_, index) => {
+  return (snackbars.value ?? []).map((_, index) => {
     return (snackbarHeight + snackbarMargin) * index;
   });
 });

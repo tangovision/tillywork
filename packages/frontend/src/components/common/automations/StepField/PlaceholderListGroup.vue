@@ -36,7 +36,7 @@ const groupLabel = computed(() => {
   );
 
   if (groupKey === 'trigger' && automation && triggers?.value) {
-    const selectedTrigger = triggers.value.find(
+    const selectedTrigger = (triggers.value ?? []).find(
       (t) => t.value === automation.value.trigger.value
     );
 
@@ -50,7 +50,7 @@ const groupLabel = computed(() => {
     }
 
     const stepIndex = parseInt(match[0]) - 1;
-    const selectedAction = actions.value.find(
+    const selectedAction = (actions.value ?? []).find(
       (a) => a.value === automation?.value.steps[stepIndex].value
     );
 
