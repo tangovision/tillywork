@@ -92,15 +92,17 @@ export const useGanttChart = ({
         });
 
         // Add day headers
-        visibleDays.forEach((dayStart) => {
-          headers.push({
-            type: 'day',
-            label: dayStart.format('ddd D'),
-            start: dayStart,
-            end: dayStart.endOf('day'),
-            width: columnWidth.value,
+        if (Array.isArray(visibleDays)) {
+          visibleDays.forEach((dayStart) => {
+            headers.push({
+              type: 'day',
+              label: dayStart.format('ddd D'),
+              start: dayStart,
+              end: dayStart.endOf('day'),
+              width: columnWidth.value,
+            });
           });
-        });
+        }
       }
 
       // Move to the next week

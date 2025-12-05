@@ -159,13 +159,15 @@ export function useSocket() {
   function reattachEventListeners() {
     if (!socket.value) return;
 
-    eventListeners.forEach((listeners, event) => {
-      if (listeners && typeof listeners.forEach === 'function') {
-        listeners.forEach((listener) => {
-          socket.value?.on(event, listener);
-        });
-      }
-    });
+    if (eventListeners && typeof eventListeners.forEach === 'function') {
+      eventListeners.forEach((listeners, event) => {
+        if (listeners && typeof listeners.forEach === 'function') {
+          listeners.forEach((listener) => {
+            socket.value?.on(event, listener);
+          });
+        }
+      });
+    }
 
     console.log('Reattached event listeners after reconnection');
   }

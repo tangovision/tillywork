@@ -56,16 +56,19 @@ export const useView = ({
   // Get all cards from all queries
   const allCards = computed(() => {
     const cards: Card[] = [];
-    (allQueries.value ?? []).forEach((query) => {
-      const pages = query.data?.value?.pages;
-      if (pages && Array.isArray(pages)) {
-        (pages ?? []).forEach((page: CardsData) => {
-          if (page?.cards && Array.isArray(page.cards)) {
-            cards.push(...page.cards);
-          }
-        });
-      }
-    });
+    const queries = allQueries.value ?? [];
+    if (Array.isArray(queries)) {
+      queries.forEach((query) => {
+        const pages = query.data?.value?.pages;
+        if (pages && Array.isArray(pages)) {
+          (pages ?? []).forEach((page: CardsData) => {
+            if (page?.cards && Array.isArray(page.cards)) {
+              cards.push(...page.cards);
+            }
+          });
+        }
+      });
+    }
     return cards;
   });
 
