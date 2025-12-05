@@ -46,8 +46,8 @@ RUN apk add --no-cache nodejs npm curl && \
     npm cache clean --force
 
 # Copy built assets from build stage
-COPY --from=build /app/dist/packages/backend ./dist/backend
-COPY --from=build /app/dist/packages/shared ./dist/shared
+COPY --from=build /app/dist/packages/backend ./dist/packages/backend
+COPY --from=build /app/dist/packages/shared ./dist/packages/shared
 COPY --from=build /app/dist/packages/frontend /usr/share/nginx/html
 
 # Copy configuration files
