@@ -1,4 +1,4 @@
-// Build timestamp: 2025-12-04T13:15:00Z - Force rebuild v2 with null safety fixes for forEach
+// Build timestamp: 2025-12-05T12:30:00Z - Force rebuild v3 with comprehensive null safety fixes
 import App from './app/App.vue';
 
 import router from './router';

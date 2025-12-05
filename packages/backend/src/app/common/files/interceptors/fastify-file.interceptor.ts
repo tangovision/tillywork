@@ -56,7 +56,7 @@ export interface FastifyFileInterceptorOptions {
  * @UseInterceptors(FastifyFileInterceptor('file', { maxFileSize: 50 * 1024 * 1024 }))
  */
 export function FastifyFileInterceptor(
-    fieldName: string = "file",
+    fieldName = "file",
     options: FastifyFileInterceptorOptions = {}
 ): Type<NestInterceptor> {
     @Injectable()

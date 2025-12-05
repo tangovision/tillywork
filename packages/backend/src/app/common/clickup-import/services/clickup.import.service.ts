@@ -663,7 +663,7 @@ export class ClickUpImportService {
             // Find the stage
             const listStageMap = stageMap.get(String(list.id));
             const statusName = task["Status"] || "";
-            let stage =
+            const stage =
                 listStageMap?.get(statusName.toLowerCase()) ||
                 listStageMap?.values().next().value;
 
@@ -806,7 +806,7 @@ export class ClickUpImportService {
         workspaceId: number,
         spaceId: number
     ): Promise<string> {
-        let slug = slugify(name, { lower: true, strict: true });
+        const slug = slugify(name, { lower: true, strict: true });
 
         const existingSlugs = await this.listsRepository.find({
             where: { workspaceId, spaceId },
