@@ -4,7 +4,7 @@ import { FindManyOptions, Repository } from "typeorm";
 import { User } from "./user.entity";
 import { CreateUserDto } from "./dto/create.user.dto";
 import { UpdateUserDto } from "./dto/update.user.dto";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export type UserFindAllResult = {
     total: number;

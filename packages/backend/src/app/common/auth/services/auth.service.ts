@@ -2,7 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { UsersService } from "../../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "../../users/user.entity";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { CreateUserDto } from "../../users/dto/create.user.dto";
 import { ProjectsService } from "../../projects/projects.service";
 import { CreateProjectDto } from "../../projects/dto/create.project.dto";
