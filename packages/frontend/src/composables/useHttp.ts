@@ -12,7 +12,7 @@ let axiosInstance: AxiosInstance;
  */
 const refreshTokenInterceptor = async (error: any) => {
   const authStore = useAuthStore();
-  const { login, logout } = authStore;
+  const { logout } = authStore;
   const { token } = storeToRefs(authStore);
 
   if (error.response.status === 401 && !error.config._retry && token.value) {

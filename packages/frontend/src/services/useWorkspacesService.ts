@@ -86,7 +86,7 @@ export const useWorkspacesService = () => {
   function useUpdateWorkspaceMutation() {
     return useMutation({
       mutationFn: updateWorkspace,
-      onSuccess: (updatedWorkspace) => {
+      onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['workspaces'] });
       },
     });

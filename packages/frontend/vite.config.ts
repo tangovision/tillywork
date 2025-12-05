@@ -29,11 +29,11 @@ export default defineConfig({
   },
 
   plugins: [
+    VueRouter(),
     veaury({
       type: 'vue',
     }),
     // vue(),
-    VueRouter(),
     nxViteTsPaths(),
     AutoImport({
       imports: ['vue', VueRouterAutoImports, 'pinia', '@vueuse/core'],

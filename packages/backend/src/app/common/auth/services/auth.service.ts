@@ -11,6 +11,7 @@ import { ProjectUsersService } from "../../projects/project-users/project.users.
 import { ClsService } from "nestjs-cls";
 import { NotificationPreferenceService } from "../../notifications/notification-preference/notification.preference.service";
 import { NotificationChannel } from "@tillywork/shared";
+import { MailerService } from "../../mailer/mailer.service";
 
 export type RegisterResponse =
     | (User & {
@@ -30,7 +31,8 @@ export class AuthService {
         private projectsService: ProjectsService,
         private projectUsersService: ProjectUsersService,
         private clsService: ClsService,
-        private notificationPreferenceService: NotificationPreferenceService
+        private notificationPreferenceService: NotificationPreferenceService,
+        private mailerService: MailerService
     ) {}
 
     async login({ user }: { user: User }): Promise<string> {
@@ -226,9 +228,8 @@ export class AuthService {
         // Update user with reset token and expiry
         await this.usersService.updateResetToken(user.id, hashedToken, resetTokenExpiry);
 
-        // TODO: Send email with resetToken
-        // In production, you would send an email here with a link like:
-        // ${FRONTEND_URL}/reset-password?token=${resetToken}
+        // Send email with resetToken
+        await this.mailerService.sendPasswordResetEmail(user, resetToken);
         
         this.logger.log(`Password reset requested for user ${user.id}`);
         

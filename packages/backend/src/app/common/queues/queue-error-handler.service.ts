@@ -76,10 +76,18 @@ export class QueueErrorHandlerService implements OnModuleInit {
             queueName
         );
 
-        // TODO: Implement alerting for critical job failures
-        // - Send to monitoring service (e.g., Sentry)
-        // - Trigger alerts for critical queues
-        // - Store in dead letter queue for manual review
+        // Critical Alert: Job Failed
+        this.logger.error(
+            `[ALERT][${queueName}] Job failure: ${job.id}`,
+            {
+                jobId: job.id,
+                jobName: job.name,
+                attempts: job.attemptsMade,
+                error: err.message,
+                stack: err.stack,
+                data: job.data,
+            }
+        );
     }
 
     /**
@@ -105,8 +113,14 @@ export class QueueErrorHandlerService implements OnModuleInit {
             queueName
         );
 
-        // TODO: Implement critical alerting for queue infrastructure failures
-        // These errors indicate Redis connection issues or queue corruption
+        // Critical Alert: Queue Infrastructure Error
+        this.logger.error(
+            `[CRITICAL][${queueName}] Infrastructure error: ${error.message}`,
+            {
+                error: error.message,
+                stack: error.stack,
+            }
+        );
     }
 
     /**
@@ -119,10 +133,16 @@ export class QueueErrorHandlerService implements OnModuleInit {
             queueName
         );
 
-        // TODO: Implement metrics collection
-        // - Job completion rate
-        // - Average processing time
-        // - Queue depth monitoring
+        // Metrics: Job Completion
+        this.logger.log(
+            `[METRIC][${queueName}] Job completed`,
+            {
+                jobId: job.id,
+                jobName: job.name,
+                duration,
+                attempts: job.attemptsMade,
+            }
+        );
     }
 
     /**

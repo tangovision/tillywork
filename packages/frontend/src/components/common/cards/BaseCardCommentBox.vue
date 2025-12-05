@@ -21,11 +21,13 @@ const { openBaseEditorFileDialog } = useBaseEditor({
 
 defineProps<{
   placeholder?: string;
-  //TODO add rules
+  required?: boolean;
 }>();
 const emit = defineEmits(['submit']);
 
 function handleSubmit() {
+  if (isEmpty.value) return;
+
   emit('submit', value.value);
 }
 </script>

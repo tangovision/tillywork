@@ -10,6 +10,7 @@ import { Email } from "./email.entity";
 import { UsersService } from "../users/users.service";
 import { SendMentionNotificationParams } from "./mailer.controller";
 import { EmailStatus } from "./types";
+import { User } from "../users/user.entity";
 
 export type EmailOptions = MailOptions & {
     id: string;
@@ -190,6 +191,24 @@ export class MailerService {
             } mentioned you in a
             <a href="${route}">${cardType.name.toLowerCase()}</a>.
             </p>
+            `,
+        });
+    }
+
+    async sendPasswordResetEmail(user: User, resetToken: string) {
+        const frontendUrl =
+            this.configService.get("TW_FRONTEND_URL") || "http://localhost:4200";
+        const resetLink = `${frontendUrl}/auth/reset-password?token=${resetToken}`;
+
+        return this.sendEmail({
+            to: user.email,
+            subject: "Reset your password",
+            html: `
+            <p>Hello ${user.firstName},</p>
+            <p>You requested a password reset. Click the link below to reset your password:</p>
+            <p><a href="${resetLink}">Reset Password</a></p>
+            <p>This link will expire in 1 hour.</p>
+            <p>If you didn't request this, please ignore this email.</p>
             `,
         });
     }

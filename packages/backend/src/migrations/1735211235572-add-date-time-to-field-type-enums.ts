@@ -10,5 +10,6 @@ export class AddDateTimeToFieldTypeEnums1735211235572
         `);
     }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+    public async down(_queryRunner: QueryRunner): Promise<void> {}
 }

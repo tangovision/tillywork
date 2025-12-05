@@ -17,6 +17,7 @@ import { SpaceAccessStrategy } from "./strategies/access.strategy/space.access.s
 import { ListAccessStrategy } from "./strategies/access.strategy/list.access.strategy";
 import { AclContext } from "./context/acl.context";
 import { NotificationPreferenceModule } from "../notifications/notification-preference/notification.preference.module";
+import { MailerModule } from "../mailer/mailer.module";
 
 @Module({
     imports: [
@@ -33,6 +34,7 @@ import { NotificationPreferenceModule } from "../notifications/notification-pref
         forwardRef(() => ProjectUsersModule),
         TypeOrmModule.forFeature([AccessControl]),
         NotificationPreferenceModule,
+        MailerModule,
     ],
     providers: [
         AuthService,
