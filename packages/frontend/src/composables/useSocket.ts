@@ -160,9 +160,11 @@ export function useSocket() {
     if (!socket.value) return;
 
     eventListeners.forEach((listeners, event) => {
-      listeners.forEach((listener) => {
-        socket.value?.on(event, listener);
-      });
+      if (listeners && typeof listeners.forEach === 'function') {
+        listeners.forEach((listener) => {
+          socket.value?.on(event, listener);
+        });
+      }
     });
 
     console.log('Reattached event listeners after reconnection');

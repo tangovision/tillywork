@@ -58,9 +58,11 @@ export const useView = ({
     const cards: Card[] = [];
     (allQueries.value ?? []).forEach((query) => {
       const pages = query.data?.value?.pages;
-      if (pages) {
-        pages.forEach((page: CardsData) => {
-          cards.push(...page.cards);
+      if (pages && Array.isArray(pages)) {
+        (pages ?? []).forEach((page: CardsData) => {
+          if (page?.cards && Array.isArray(page.cards)) {
+            cards.push(...page.cards);
+          }
         });
       }
     });

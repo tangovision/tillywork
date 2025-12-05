@@ -243,7 +243,7 @@ export const useCommandStore = defineStore('command', () => {
           field,
         }));
 
-      fieldCommands.forEach((fc) => commands.push(fc));
+      (fieldCommands ?? []).forEach((fc) => commands.push(fc));
 
       commands.push({
         id: 'copy-link',
