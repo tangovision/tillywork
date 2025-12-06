@@ -23,7 +23,7 @@ import helmet from "@fastify/helmet";
 async function bootstrap() {
     const logger = new TillyLogger("main.ts");
     const fastifyAdapter = new FastifyAdapter({
-        bodyLimit: 10 * 1024 * 1024, // 10MB body limit
+        bodyLimit: 50 * 1024 * 1024, // 50MB body limit
     });
 
     const app = await NestFactory.create<NestFastifyApplication>(
