@@ -177,7 +177,7 @@ export class CardSubscriber implements EntitySubscriberInterface<Card> {
                         message:
                             "No field was found while creating card activity record. ",
                         slug: key,
-                        workspaceId: event.entity.workspace.id,
+                        workspaceId: event.entity.workspace?.id || event.entity.workspaceId,
                     });
                     return null;
                 }
@@ -349,7 +349,7 @@ export class CardSubscriber implements EntitySubscriberInterface<Card> {
                 workspace: {
                     id: event.entity.workspace?.id
                         ? event.entity.workspace.id
-                        : event.entity.workspace,
+                        : event.entity.workspaceId,
                 },
                 cardType: {
                     id: event.entity.type.id,
@@ -364,7 +364,7 @@ export class CardSubscriber implements EntitySubscriberInterface<Card> {
                     workspace: {
                         id: event.entity.workspace?.id
                             ? event.entity.workspace.id
-                            : event.entity.workspace,
+                            : event.entity.workspaceId,
                     },
                     cardType: {
                         id: IsNull(),
