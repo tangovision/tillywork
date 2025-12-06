@@ -745,7 +745,7 @@ export class ClickUpImportService {
             // Create card list association
             if (stage) {
                 const cardList = queryRunner.manager.create(CardList, {
-                    cardId: card.id,
+                    card,
                     listId: list.id,
                     listStageId: stage.id,
                     order: result.importedCards,
