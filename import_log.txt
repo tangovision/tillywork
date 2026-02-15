@@ -1,0 +1,1020 @@
+Logging in...
+(node:19704) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Login successful.
+Fetching workspaces...
+Using Workspace: Projects (ID: 1)
+Fetching card types...
+Using Card Type: Task (ID: 1)
+Creating "ClickUp Import" Space...
+Created Space: ClickUp Import (ID: 8)
+Creating "Imported Tasks" List...
+Created List: Imported Tasks (ID: 10)
+Ensuring _clickup_import field exists...
+Creating _clickup_import field...
+Failed to create _clickup_import field: {"statusCode":409,"timestamp":"2025-12-06T01:23:21.367Z","path":"/v1/fields","error":"Conflict","message":"This slug is already used in this workspace."}
+Importing file: /Users/PvUtrix_1/Apps/_Tango.Vision/refactor2.0/tv-platform/tillywork/clickup/ClickUp Export (4).csv
+Sending import request...
+Import Result: {
+  "success": true,
+  "totalTasks": 198,
+  "importedCards": 0,
+  "skippedTasks": 198,
+  "createdSpaces": 0,
+  "createdLists": 0,
+  "createdStages": 36,
+  "errors": [
+    {
+      "taskId": "8692tucue",
+      "taskName": "Skoltech-table5-HfHD",
+      "message": "null value in column \"cardId\" of relation \"card_list\" violates not-null constraint"
+    },
+    {
+      "taskId": "8692tucwe",
+      "taskName": "Skoltech-table1-HfHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692tud0d",
+      "taskName": "skoltech-G11-V-fHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692tud2d",
+      "taskName": "skoltech-G6-V-fHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692tud0w",
+      "taskName": "skoltech-G8-V-fHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692tucv4",
+      "taskName": "Skoltech-G4-V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692tucx5",
+      "taskName": "Skoltech-table2-HfHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692tucy4",
+      "taskName": "Skoltech-table3-HfHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692tucyx",
+      "taskName": "Skoltech-table4-HfHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "869363t34",
+      "taskName": "skoltech-G5-1-V-fHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "869363ukj",
+      "taskName": "skoltech-G5-2-V-fHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rretq",
+      "taskName": "msk_adg_budapesht H-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rretu",
+      "taskName": "msk_adg_neva H-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrexu",
+      "taskName": "msk_adg_sofia1 H4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrexw",
+      "taskName": "msk_adg_sofia3 (SW4p13) H4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrexz",
+      "taskName": "msk_adg_sofia5 (SW27p4) H4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrey0",
+      "taskName": "msk_adg_sofia6 (SW8p34) H4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf1a",
+      "taskName": "msk_adg_ekran1 H4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrexy",
+      "taskName": "msk_adg_sofia4 (SW23p6) H4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrey2",
+      "taskName": "msk_adg_yantar1 H4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrett",
+      "taskName": "msk_adg_elbrus H-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrezp",
+      "taskName": "Baikonur_1_H4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrezr",
+      "taskName": "Kirgiziya1 H4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrexv",
+      "taskName": "msk_adg_sofia2 H4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rretx",
+      "taskName": "msk_adg_mars H-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrety",
+      "taskName": "msk_adg_vysota H-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rretr",
+      "taskName": "msk_adg_rassvet H-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf17",
+      "taskName": " DepZdrav - Veresaeva - Main",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrewd",
+      "taskName": "msk_vod_1 (Головинский) V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrewg",
+      "taskName": "msk_vod_2 (Кронштадский) V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rretz",
+      "taskName": "Zelenopark 16-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreu2",
+      "taskName": "Zelenopark 1-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreu6",
+      "taskName": "Zelenopark 2-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreu9",
+      "taskName": "Zelenopark 2-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreuc",
+      "taskName": "Zelenopark 14-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreuf",
+      "taskName": "Zelenopark 17-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreut",
+      "taskName": "Zelenopark 15-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreuv",
+      "taskName": "Zelenopark 15-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrev7",
+      "taskName": "Zelenopark 19-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreva",
+      "taskName": "Zelenopark 19-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrevm",
+      "taskName": "Zelenopark 7-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrevp",
+      "taskName": "Zelenopark 4-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrevq",
+      "taskName": "Zelenopark 4-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrevy",
+      "taskName": "Zelenopark 3-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrew0",
+      "taskName": "Zelenopark 3-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrew6",
+      "taskName": "Zelenopark 8-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrew7",
+      "taskName": "Zelenopark 8-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrew8",
+      "taskName": "Zelenopark 10-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrew9",
+      "taskName": "Zelenopark 10-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreve",
+      "taskName": "Zelenopark 5-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreue",
+      "taskName": "Zelenopark 17-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreuy",
+      "taskName": "Zelenopark 12-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrevw",
+      "taskName": "Zelenopark 11-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrev1",
+      "taskName": "Zelenopark 20-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrevv",
+      "taskName": "Zelenopark 9-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrew4",
+      "taskName": "Zelenopark 6-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrew1",
+      "taskName": "Zelenopark 6-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrev0",
+      "taskName": "Zelenopark 12-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreuj",
+      "taskName": "Zelenopark 18-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreu3",
+      "taskName": "Zelenopark 1-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreua",
+      "taskName": "Zelenopark 14-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrevh",
+      "taskName": "Zelenopark 7-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreup",
+      "taskName": "Zelenopark 13-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrev4",
+      "taskName": "Zelenopark 20-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreug",
+      "taskName": "Zelenopark 18-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreu0",
+      "taskName": "Zelenopark 16-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreuk",
+      "taskName": "Zelenopark 13-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrevu",
+      "taskName": "Zelenopark 9-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrevc",
+      "taskName": "Zelenopark 5-1 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrevx",
+      "taskName": "Zelenopark 11-2 V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf1c",
+      "taskName": "2_Captains_2_H-FullHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf1j",
+      "taskName": "2_Captains_3_H-FullHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf1n",
+      "taskName": "2_Captains_1_H-FullHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrezz",
+      "taskName": "Volgograd 17 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf01",
+      "taskName": "Volgograd 4 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf03",
+      "taskName": "Volgograd 7-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf04",
+      "taskName": "Volgograd 12-1V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf07",
+      "taskName": "Volgograd 12-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf09",
+      "taskName": "Volgograd 13-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf0g",
+      "taskName": "Volgograd 16 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf0k",
+      "taskName": "Volgograd 11 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf0m",
+      "taskName": "Volgograd 5-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf0r",
+      "taskName": "Volgograd 9-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf0x",
+      "taskName": "Volgograd 2-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf10",
+      "taskName": "Volgograd 2-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf14",
+      "taskName": "Volgograd 7-1 V4K new ubuntu",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf0e",
+      "taskName": "Volgograd 15 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf0d",
+      "taskName": "Volgograd 14-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf0a",
+      "taskName": "Volgograd 14-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf08",
+      "taskName": "Volgograd 13-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf0v",
+      "taskName": "Volgograd 9-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf0p",
+      "taskName": "Volgograd 5-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf12",
+      "taskName": "Volgograd 1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8693e3qfu",
+      "taskName": "разобраться, что с картой на терминале №1",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrezt",
+      "taskName": "pushkino-2 H-Fhd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrezw",
+      "taskName": "pushkino-1 H-Fhd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyh",
+      "taskName": "SC1 0_23 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyn",
+      "taskName": "SC2 1_59 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyq",
+      "taskName": "SC6 1_68 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyr",
+      "taskName": "SC3 2_15 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyt",
+      "taskName": "SC4 зарина/odjii 3_82 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreym",
+      "taskName": "SC8 1_17A H-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyk",
+      "taskName": "SC7 1_13 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyj",
+      "taskName": "SC5 0_10 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692u6ycv",
+      "taskName": "SC-9 New 1680-1050 horiz",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrey8",
+      "taskName": "guap_lensoveta_vertical V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreya",
+      "taskName": "guap_moskovsky_vertical V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyc",
+      "taskName": "quap_GA_vertical V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyd",
+      "taskName": "guap_zhukova_master V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreye",
+      "taskName": "guap_peredovikov_vertical V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyf",
+      "taskName": "guap_varshavskaya_vertical V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrey4",
+      "taskName": "guap_bm_horizontal H4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrey6",
+      "taskName": "guap_bm_vertical V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrex6",
+      "taskName": "Shokolad 1-1 Центральный вход V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrex8",
+      "taskName": "Shokolad 1-2 Фонтан V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrexd",
+      "taskName": "Shokolad 1-3 Лента V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrexh",
+      "taskName": "Shokolad 2-1 Stradivarius V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrexn",
+      "taskName": "Shokolad 4-1 Синема Кафе V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrexr",
+      "taskName": "Shokolad 4-2 Gulliver V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rret9",
+      "taskName": "OZMall MD_01_03_FHD (Спортмастер)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rretb",
+      "taskName": "OZMall MD_01_01_FHD (H&M)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rretf",
+      "taskName": "OZMall MD_02_01_FHD (H&M)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rretj",
+      "taskName": "OZMall MD_02_04_FHD (Large Atrium)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rretn",
+      "taskName": "OZMall MD_02_05_FHD (Il Патио)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rret2",
+      "taskName": "ozmall_2_FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rret3",
+      "taskName": "OZMall MD_01_07_FHD (Вход Кропоткин)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rret4",
+      "taskName": "OZMall MD_01_06_FHD (Gloria Jeans)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rret6",
+      "taskName": "OZMall MD_01_04_FHD (Sky Ice Cafe)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rret8",
+      "taskName": "OZMall MD_01_02_FHD  (Info Desk)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreth",
+      "taskName": "OZMall MD_02_02_FHD (Small Atrium)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rret5",
+      "taskName": "OZMall MD_01_05_FHD (Sky Ice)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrerz",
+      "taskName": "Kryl'ya SM (MSC) V-FHD",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyv",
+      "taskName": "Troyka 4-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyy",
+      "taskName": "Troyka 4-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrez2",
+      "taskName": "Troyka 2-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrez3",
+      "taskName": "Troyka 5-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrez6",
+      "taskName": "Troyka 1-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrez7",
+      "taskName": "Troyka 5-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrezg",
+      "taskName": "Troyka 6-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrezk",
+      "taskName": "Troyka 6-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreyz",
+      "taskName": "Troyka 3-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrez1",
+      "taskName": "Troyka 3-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrez4",
+      "taskName": "Troyka 2-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreze",
+      "taskName": "Troyka 7-2 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrez8",
+      "taskName": "Troyka 1-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rreza",
+      "taskName": "Troyka 7-1 V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf1q",
+      "taskName": "gal_1_1(главный вход)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf1t",
+      "taskName": "gal_1_2 (вх восстания 2)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf1x",
+      "taskName": "gal_1_4 (Ривгош)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf1y",
+      "taskName": "gal_1_3 (выход лиговский)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf29",
+      "taskName": "gal_2_4 (reserve)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf2b",
+      "taskName": "gal_3_3 (m-video)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf2d",
+      "taskName": "gal_3_2 (сев эск up)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf2e",
+      "taskName": "gal_3_4 (Ostin)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf2h",
+      "taskName": "gal_4_1 (administration)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf2k",
+      "taskName": "gal_4_2 (детский мир)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf2p",
+      "taskName": "gal_4_4 (сев эск down)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf2n",
+      "taskName": "gal_4_3 (сев эск up)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf2c",
+      "taskName": "gal_3_1 (сев эск down)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf24",
+      "taskName": "gal_2_2 (сев эск down)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf28",
+      "taskName": "gal_2_3 (снежная королева)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrf20",
+      "taskName": "gal_2_1 (сев эск up)",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrewm",
+      "taskName": "msk_ohr_5 (Calliope) [6993] V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrewq",
+      "taskName": "msk_ohr_4 (Adamas) [6992] V4K ",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrewu",
+      "taskName": "msk_ohr_6 (Love Republic) [7362] V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrewy",
+      "taskName": "msk_ohr_8 (Shelle) [7360] V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrex0",
+      "taskName": "msk_ohr_10 (фонтан) [7435] V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrex4",
+      "taskName": "msk_ohr_2(street beat) [7438] V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrex3",
+      "taskName": "msk_ohr_1 (tezenis) [7437] V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrex2",
+      "taskName": "msk_ohr_9 (Incity) [7436] V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrewv",
+      "taskName": "msk_ohr_7 (Rendez-vous) V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8692rrewp",
+      "taskName": "msk_ohr_3 (Мармеладный мир) [6991] V4K",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86936tdtt",
+      "taskName": "Esentai 4.tim.south VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86938arzf",
+      "taskName": "Esentai 1.alf.nord HFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86938au73",
+      "taskName": "Esentai 2.tim.south HFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86938au57",
+      "taskName": "Esentai 2.alf.south VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86938au29",
+      "taskName": "Esentai 2.alf.nord VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86938attq",
+      "taskName": "Esentai 1.esnt.east VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86938atyh",
+      "taskName": "Esentai 1.esnt.west VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86938atky",
+      "taskName": "Esentai 1.alf.south HFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86938arv4",
+      "taskName": "Esentai -1.alf.south HFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "869371x21",
+      "taskName": "Esentai 3.tim.west VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86936tdxn",
+      "taskName": "Esentai 4.alf.west VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "869371wvw",
+      "taskName": "Esentai 3.tim.east VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "869371wnm",
+      "taskName": "Esentai 3.alf.south VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "869371wc9",
+      "taskName": "Esentai 3.alf.nord VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86936te5p",
+      "taskName": "Esentai 4.alf.east VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86936te2g",
+      "taskName": "Esentai 1.tim.south HFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "86936tdpk",
+      "taskName": "Esentai 4.tim.nord VFHd",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8693vb47a",
+      "taskName": " \\nНе работает",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8693vjfq4",
+      "taskName": "тормозит карта",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8693xcn6k",
+      "taskName": "нету изображения",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8693yj14f",
+      "taskName": " test",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8694022wh",
+      "taskName": " Все \\nПрошу изменить время на всех навигаторах \\nВ связи с переходом на часовой пояс +5 \\nНужно перевести на час назад",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8694hu08d",
+      "taskName": "мерцает реклама",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8694hzej7",
+      "taskName": "нету картинки",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8694j32t6",
+      "taskName": "2,3 мерцает картинка",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    },
+    {
+      "taskId": "8693yg921",
+      "taskName": " тест",
+      "message": "current transaction is aborted, commands ignored until end of transaction block"
+    }
+  ],
+  "warnings": [],
+  "cardIdMap": {}
+}
