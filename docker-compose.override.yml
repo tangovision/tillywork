@@ -1,5 +1,5 @@
 # Development overrides - automatically merged with docker-compose.yml
-# This file is NOT used by Coolify (production)
+# Local overrides only — production runs on Kubernetes (Argo CD).
 services:
   tillywork:
     ports:

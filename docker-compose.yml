@@ -1,4 +1,4 @@
-# Production config - Coolify handles port routing via its proxy
+# Production-oriented compose reference; Kubernetes routing uses Ingress / Gateway (Argo CD).
 # For development, docker-compose.override.yml adds local Redis and ports
 # For observability, use: docker compose -f docker-compose.yml -f docker-compose.observability.yml up
 services:
