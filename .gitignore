@@ -56,3 +56,8 @@ Thumbs.db
 
 # Redis
 **/dump.rdb
+# Environment files (security: prevent .env.backup-style credential leaks)
+.env
+.env.*
+*.env.bak
+!.env.example
