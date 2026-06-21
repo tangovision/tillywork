@@ -69,5 +69,9 @@ EXPOSE 80 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:3000/v1/auth || exit 1
 
+# Intentionally runs as root: nginx (master process, started by start.sh)
+# binds container port 80, which requires CAP_NET_BIND_SERVICE/root, and
+# pm2-runtime manages the Node backend alongside it in the same process
+# tree. Switching to a non-root USER here would break the nginx bind.
 # Run the application
 CMD ["/start.sh"]
