@@ -103,7 +103,7 @@ onMounted(() => {
         hide-actions
         bg-color="dialog"
       >
-        <template #item.1>
+        <template #[`item.1`]>
           <v-img
             :src="logo.getLogoUrlByTheme()"
             width="180"
@@ -122,7 +122,7 @@ onMounted(() => {
             >
           </div>
         </template>
-        <template #item.2>
+        <template #[`item.2`]>
           <v-img
             :src="logo.getLogoUrlByTheme()"
             width="180"
@@ -248,7 +248,7 @@ onMounted(() => {
             </v-row>
           </v-container>
         </template>
-        <template #item.3>
+        <template #[`item.3`]>
           <v-img
             :src="logo.getLogoUrlByTheme()"
             width="180"

@@ -89,6 +89,30 @@ function updateEmailSentAt(sentAt: string) {
     content: newContent,
   });
 }
+
+const emailSubject = computed({
+  get: () => activity.content.subject,
+  set: (subject: string) => {
+    updateEmail({
+      content: {
+        ...activity.content,
+        subject,
+      },
+    });
+  },
+});
+
+const emailBody = computed({
+  get: () => activity.content.body,
+  set: (body: string) => {
+    updateEmail({
+      content: {
+        ...activity.content,
+        body,
+      },
+    });
+  },
+});
 </script>
 
 <template>
@@ -143,10 +167,10 @@ function updateEmailSentAt(sentAt: string) {
       <v-card-text>
         <base-editor-input
           v-if="activity.content.subject"
-          v-model:text="activity.content.subject"
+          v-model:text="emailSubject"
           :heading="4"
         />
-        <base-editor-input v-model:html="activity.content.body" />
+        <base-editor-input v-model:html="emailBody" />
       </v-card-text>
       <v-card-actions class="px-3 border-t-thin">
         <span class="text-body-3 me-2">
