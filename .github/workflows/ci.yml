@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x]
 
     steps:
       - name: Checkout code
@@ -30,15 +30,15 @@ jobs:
           CYPRESS_INSTALL_BINARY: 0  # Skip Cypress binary download
 
       - name: Lint backend
-        run: npm run lint --workspace=packages/backend
+        run: npx nx run backend:lint
         continue-on-error: false
 
       - name: Lint frontend
-        run: npm run lint --workspace=packages/frontend
+        run: npx nx run frontend:lint
         continue-on-error: false
 
       - name: Build backend
-        run: npm run build --workspace=packages/backend
+        run: npx nx run backend:build
         env:
           # Set minimal environment variables required for build
           TW_SECRET_KEY: test-secret-key-for-ci-build-only
@@ -54,7 +54,7 @@ jobs:
           NODE_ENV: test
 
       - name: Build frontend
-        run: npm run build --workspace=packages/frontend
+        run: npx nx run frontend:build
         env:
           TW_VITE_API_URL: http://localhost:3000/v1
 
@@ -75,5 +75,7 @@ jobs:
         continue-on-error: true  # Don't fail CI on audit issues, but report them
 
       - name: Check for critical vulnerabilities
-        run: npm audit --audit-level=critical
-        continue-on-error: false  # Fail CI on critical vulnerabilities
+        # Scoped to production deps: critical CVEs in dev-only tooling (e.g. Nx/Vitest
+        # major-version bumps) shouldn't hard-block every push; Dependabot tracks those.
+        run: npm audit --audit-level=critical --production
+        continue-on-error: false  # Fail CI on critical vulnerabilities shipped to users

@@ -78,15 +78,9 @@ export class QueueErrorHandlerService implements OnModuleInit {
 
         // Critical Alert: Job Failed
         this.logger.error(
-            `[ALERT][${queueName}] Job failure: ${job.id}`,
-            {
-                jobId: job.id,
-                jobName: job.name,
-                attempts: job.attemptsMade,
-                error: err.message,
-                stack: err.stack,
-                data: job.data,
-            }
+            `[ALERT][${queueName}] Job failure: ${job.id} (${job.name}), attempts=${job.attemptsMade}, data=${JSON.stringify(job.data)}`,
+            err.stack,
+            queueName
         );
     }
 
@@ -116,10 +110,8 @@ export class QueueErrorHandlerService implements OnModuleInit {
         // Critical Alert: Queue Infrastructure Error
         this.logger.error(
             `[CRITICAL][${queueName}] Infrastructure error: ${error.message}`,
-            {
-                error: error.message,
-                stack: error.stack,
-            }
+            error.stack,
+            queueName
         );
     }
 
@@ -135,13 +127,8 @@ export class QueueErrorHandlerService implements OnModuleInit {
 
         // Metrics: Job Completion
         this.logger.log(
-            `[METRIC][${queueName}] Job completed`,
-            {
-                jobId: job.id,
-                jobName: job.name,
-                duration,
-                attempts: job.attemptsMade,
-            }
+            `[METRIC][${queueName}] Job completed (id=${job.id}, name=${job.name}, duration=${duration}ms, attempts=${job.attemptsMade})`,
+            queueName
         );
     }
 

@@ -172,7 +172,7 @@ function updateTaskDueDate(dueAt: string) {
       </v-card-text>
       <v-card-text>
         <base-editor-input
-          v-model:text="activity.content.title"
+          :model-value="activity.content.title"
           :heading="3"
           :editable="false"
         />
