@@ -9,23 +9,24 @@ tillywork is an open-source work management platform built as a monorepo using N
 ## Development Commands
 
 ```bash
-# Install dependencies
-npm install --legacy-peer-deps
+# Install dependencies (pnpm 8 is pinned — Nx 19.1's lockfile parser
+# only understands the v5/v6 pnpm-lock.yaml format, not v9+)
+pnpm install
 
 # Development (runs both frontend and backend)
-npm run dev
+pnpm dev
 
 # Build for production
-npm run build
+pnpm build
 
 # Linting
-npm run lint
+pnpm lint
 
 # Generate Swagger metadata
-npm run swagger
+pnpm swagger
 
 # Reset database (drops and recreates)
-npm run reset
+pnpm reset
 ```
 
 ### Nx-specific Commands

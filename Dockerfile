@@ -3,6 +3,10 @@
 # =============================================================================
 FROM node:bullseye-slim AS build
 
+# Pin pnpm 8: Nx 19.1's lockfile parser only understands the v5/v6
+# pnpm-lock.yaml format, not the v9 format written by pnpm 9+.
+RUN corepack enable && corepack prepare pnpm@8 --activate
+
 WORKDIR /app
 
 # Build arguments for frontend
@@ -11,21 +15,21 @@ ENV TW_VITE_POSTHOG_KEY=${TW_VITE_POSTHOG_KEY}
 ENV TW_VITE_API_URL=/api/v1
 
 # Copy package files first for better layer caching
-COPY package*.json ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY nx.json tsconfig*.json ./
-COPY packages/backend/package*.json ./packages/backend/
-COPY packages/frontend/package*.json ./packages/frontend/
-COPY packages/shared/package*.json ./packages/shared/
-COPY packages/docs/package*.json ./packages/docs/
+COPY packages/backend/package.json ./packages/backend/
+COPY packages/frontend/package.json ./packages/frontend/
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/docs/package.json ./packages/docs/
 
 # Copy remaining source code
 COPY . .
 
-# Install dependencies (npm workspaces need all source files present)
-RUN npm install --legacy-peer-deps
+# Install dependencies (pnpm workspace needs all source files present)
+RUN pnpm install --frozen-lockfile
 
 # Generate swagger metadata (optional)
-RUN npm run swagger || true
+RUN pnpm swagger || true
 
 # Build the application
 RUN npx nx run frontend:build --skip-nx-cache && \
@@ -53,7 +57,7 @@ COPY --from=build /app/dist/packages/frontend /usr/share/nginx/html
 # Copy configuration files
 COPY nginx/frontend.conf /etc/nginx/conf.d/default.conf
 COPY ecosystem.config.js .
-COPY package*.json ./
+COPY package.json ./
 
 # Copy node_modules from build stage
 COPY --from=build /app/node_modules ./node_modules

@@ -49,9 +49,9 @@ For further details and support, please visit [our website](https://tilly.work) 
 
 - Clone the repository `git clone https://github.com/tillywork/tillywork.git`
 - Install Postgres on your device
-- Install dependancies `npm install`
+- Install dependancies `pnpm install`
 - Copy .env.example and rename to .env `cp .env.example .env` and update the values
-- Run the app `npm run dev`
+- Run the app `pnpm dev`
 
 ## License
 
