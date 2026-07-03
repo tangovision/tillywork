@@ -5,7 +5,9 @@ FROM node:bullseye-slim AS build
 
 # Pin pnpm 8: Nx 19.1's lockfile parser only understands the v5/v6
 # pnpm-lock.yaml format, not the v9 format written by pnpm 9+.
-RUN corepack enable && corepack prepare pnpm@8 --activate
+# Installed via npm rather than corepack, since corepack is no longer
+# bundled with Node 25+ and node:bullseye-slim tracks current Node builds.
+RUN npm install -g pnpm@8
 
 WORKDIR /app
 
